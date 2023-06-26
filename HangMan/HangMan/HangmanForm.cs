@@ -156,6 +156,7 @@ namespace HangMan
                 deactivateButton(key);
             }
             isPlayable = checkIfPlayable();
+            // TODO: Separate method in "ifWinner" and "ifLoser" to know if the top score file should be modified.
         }
 
         private List<int> checkLetter(string keyPressed) 
