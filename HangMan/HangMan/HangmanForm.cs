@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace HangMan
@@ -24,6 +19,7 @@ namespace HangMan
         private int wordCharactersGuessed;
         private int currentHangManStatus;
         private bool canPlay;
+
         public HangManForm()
         {
             InitializeComponent();
@@ -86,6 +82,7 @@ namespace HangMan
             }
             return buttonList;
         }
+
         public string GetRandomWord()
         {
             if (this.wordsList.Count == 0)
@@ -188,6 +185,7 @@ namespace HangMan
             button.Enabled = false;
             this.clickedButtons.Add(button);
         }
+
         private void changeHangManStatus()
         {
             if (this.canPlay) {
