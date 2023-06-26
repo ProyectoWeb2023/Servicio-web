@@ -47,6 +47,7 @@ namespace HangMan
             this.currentWord = this.currentWord.ToUpper();
             this.wordLengthBtns = AddButtons(currentWord.Length);
             this.statusImages = loadHangManstatus();
+            shownImageBox.Image = this.statusImages[this.currentHangManStatus.ToString()];
         }
 
         private Dictionary<string, Image> loadHangManstatus()
@@ -149,7 +150,7 @@ namespace HangMan
                 if (possibleCharIndexes.Count != 0)
                 {
                     changeWordLengthBtns(possibleCharIndexes, key.Text);
-                    this.wordCharactersGuessed++;
+                    this.wordCharactersGuessed+= possibleCharIndexes.Count;
                 }
                 else
                 {
@@ -164,11 +165,11 @@ namespace HangMan
         {
             List<int> indexes = new List<int>();
             char characterChosen = char.Parse(keyPressed);
-            for (int i = 0; i < this.currentWord.Length; i++)
+            for (int index = 0; index < this.currentWord.Length; index++)
             {
-                if (this.currentWord[i] == characterChosen)
+                if (this.currentWord[index] == characterChosen)
                 {
-                    indexes.Add(i);
+                    indexes.Add(index);
                 }
             }
             return indexes;
@@ -216,24 +217,13 @@ namespace HangMan
             }
         }
 
-        // TODO FIX THIS AND MAKE IT BETTER, MODULARIZE
         private void tryAgainBtn_Click(object sender, EventArgs e)
         {
             tryAgainBtn.Enabled = false;
             tryAgainBtn.Visible = false;
-            this.currentWord = String.Empty;
-            this.wordCharactersGuessed = 0;
-            this.currentHangManStatus = 0;
-            this.statusImages.Clear();
-
             deleteButtonsToGroupBox();
-            this.wordLengthBtns.Clear();
-            this.currentHangManStatus = 0;
-            DisplayButtons();
             activateButtons();
             InitializeAttributes();
-            shownImageBox.Image = this.statusImages[this.currentHangManStatus.ToString()];
-
             startGame();
         }
 
