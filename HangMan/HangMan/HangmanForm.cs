@@ -149,14 +149,15 @@ namespace HangMan
                 if (possibleCharIndexes.Count != 0)
                 {
                     changeWordLengthBtns(possibleCharIndexes, key.Text);
-                    deactivateButton(key);
                     this.wordCharactersGuessed++;
                 }
                 else
                 {
                     changeHangManStatus();
                 }
+                deactivateButton(key);
             }
+            isPlayable = checkIfPlayable();
         }
 
         private List<int> checkLetter(string keyPressed) 
@@ -190,7 +191,6 @@ namespace HangMan
         {
             if (this.canPlay) {
                 this.currentHangManStatus++;
-                this.currentHangManStatus %= this.statusImages.Count();
                 shownImageBox.Image = this.statusImages[this.currentHangManStatus.ToString()];
             }
 
@@ -199,7 +199,7 @@ namespace HangMan
         private bool checkIfPlayable() 
         {
             bool isPlayable = true;
-            if (this.currentWord.Length == this.wordCharactersGuessed || this.currentHangManStatus == this.statusImages.Count()) 
+            if (this.currentWord.Length == this.wordCharactersGuessed || this.currentHangManStatus+1 == this.statusImages.Count()) 
             {
                 tryAgainBtn.Enabled = true;
                 tryAgainBtn.Visible = true;
@@ -216,11 +216,33 @@ namespace HangMan
             }
         }
 
+        // TODO FIX THIS AND MAKE IT BETTER, MODULARIZE
         private void tryAgainBtn_Click(object sender, EventArgs e)
         {
+            tryAgainBtn.Enabled = false;
+            tryAgainBtn.Visible = false;
+            this.currentWord = String.Empty;
+            this.wordCharactersGuessed = 0;
+            this.currentHangManStatus = 0;
+            this.statusImages.Clear();
+
+            deleteButtonsToGroupBox();
+            this.wordLengthBtns.Clear();
+            this.currentHangManStatus = 0;
+            DisplayButtons();
             activateButtons();
             InitializeAttributes();
+            shownImageBox.Image = this.statusImages[this.currentHangManStatus.ToString()];
+
             startGame();
+        }
+
+        private void deleteButtonsToGroupBox()
+        {
+            foreach (Button button in wordLengthBtns)
+            {
+                wordGroupBox.Controls.Remove(button);
+            }
         }
     }
 }
