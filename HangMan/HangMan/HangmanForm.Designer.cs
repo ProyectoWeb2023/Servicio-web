@@ -60,6 +60,7 @@ namespace HangMan
             this.topScoreButton = new System.Windows.Forms.Button();
             this.wordGroupBox = new System.Windows.Forms.GroupBox();
             this.shownImageBox = new System.Windows.Forms.PictureBox();
+            this.tryAgainBtn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.shownImageBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -404,11 +405,25 @@ namespace HangMan
             this.shownImageBox.TabIndex = 29;
             this.shownImageBox.TabStop = false;
             // 
+            // tryAgainBtn
+            // 
+            this.tryAgainBtn.Enabled = false;
+            this.tryAgainBtn.Location = new System.Drawing.Point(26, 96);
+            this.tryAgainBtn.Margin = new System.Windows.Forms.Padding(5);
+            this.tryAgainBtn.Name = "tryAgainBtn";
+            this.tryAgainBtn.Size = new System.Drawing.Size(145, 44);
+            this.tryAgainBtn.TabIndex = 57;
+            this.tryAgainBtn.Text = "Retry?";
+            this.tryAgainBtn.UseVisualStyleBackColor = true;
+            this.tryAgainBtn.Visible = false;
+            this.tryAgainBtn.Click += new System.EventHandler(this.tryAgainBtn_Click);
+            // 
             // HangManForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1333, 692);
+            this.Controls.Add(this.tryAgainBtn);
             this.Controls.Add(this.wordGroupBox);
             this.Controls.Add(this.button20);
             this.Controls.Add(this.button21);
@@ -479,6 +494,7 @@ namespace HangMan
         private System.Windows.Forms.PictureBox shownImageBox;
         private System.Windows.Forms.Button topScoreButton;
         private GroupBox wordGroupBox;
+        private Button tryAgainBtn;
     }
 }
 

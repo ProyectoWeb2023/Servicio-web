@@ -16,12 +16,14 @@ namespace HangMan
         private readonly int buttonWidth = 50;
         private readonly int buttonHeight = 45;
         private List<Button> wordLengthBtns;
+        private List<Button> clickedButtons;
         private List<String> wordsList;
         private Dictionary<string, Image> statusImages;
         private Random random;
         private string currentWord;
-        private int currentHangManStatus = 0;
-
+        private int wordCharactersGuessed;
+        private int currentHangManStatus;
+        private bool canPlay;
         public HangManForm()
         {
             InitializeComponent();
@@ -33,11 +35,16 @@ namespace HangMan
         {
             this.wordLengthBtns = new List<Button>();
             this.wordsList = new List<String>();
+            this.clickedButtons = new List<Button>();
             this.statusImages = new Dictionary<string, Image>();
-            this.currentWord = String.Empty;
             this.random = new Random();
+            this.currentWord = String.Empty;
+            this.wordCharactersGuessed = 0;
+            this.currentHangManStatus = 0;
+            this.canPlay = true;
             this.wordsList = readFile();
             this.currentWord = GetRandomWord();
+            this.currentWord = this.currentWord.ToUpper();
             this.wordLengthBtns = AddButtons(currentWord.Length);
             this.statusImages = loadHangManstatus();
         }
@@ -89,19 +96,19 @@ namespace HangMan
             return this.wordsList[randomIndex];
         }
 
-        private void loadButtonsToGroupBox() 
-        {
-            foreach (Button button in wordLengthBtns)
-            {
-               wordGroupBox.Controls.Add(button);
-            }
-        }
-
         private void startGame() 
         {
             loadButtonsToGroupBox();
             DisplayButtons();
 
+        }
+
+        private void loadButtonsToGroupBox()
+        {
+            foreach (Button button in wordLengthBtns)
+            {
+                wordGroupBox.Controls.Add(button);
+            }
         }
 
         private void DisplayButtons()
@@ -124,31 +131,96 @@ namespace HangMan
         private void keyPressed(object sender, EventArgs e)
         {
             Button keyPressed = (Button)sender;
-            topScoreButton.Text = keyPressed.Text;
+            topScoreButton.Text = this.currentWord;
+            checkEvent(keyPressed);
         }
 
-        private void changeHangManStatus() 
+        private void checkEvent(Button key)
         {
-            this.currentHangManStatus++;
-            this.currentHangManStatus%=this.statusImages.Count();
-            shownImageBox.Image = this.statusImages[this.currentHangManStatus.ToString()];
+            List<int> possibleCharIndexes;
+            bool isPlayable = checkIfPlayable();
+            if (!isPlayable)
+            {
+                this.canPlay = false;
+            }
+            else 
+            {
+                possibleCharIndexes = checkLetter(key.Text);
+                if (possibleCharIndexes.Count != 0)
+                {
+                    changeWordLengthBtns(possibleCharIndexes, key.Text);
+                    deactivateButton(key);
+                    this.wordCharactersGuessed++;
+                }
+                else
+                {
+                    changeHangManStatus();
+                }
+            }
         }
 
-        private int checkLetter(string keyPressed) 
+        private List<int> checkLetter(string keyPressed) 
         {
+            List<int> indexes = new List<int>();
             char characterChosen = char.Parse(keyPressed);
-            int index = this.currentWord.IndexOf(characterChosen);
-            return index; // index != -1 to check if true or false
+            for (int i = 0; i < this.currentWord.Length; i++)
+            {
+                if (this.currentWord[i] == characterChosen)
+                {
+                    indexes.Add(i);
+                }
+            }
+            return indexes;
         }
 
-        private void changeWordLengthBtns(int position, char character) 
+        private void changeWordLengthBtns(List<int> positions, string character) 
         {
-            this.wordLengthBtns[position].Text = character.ToString();
+            foreach (int position in positions) 
+            {
+                this.wordLengthBtns[position].Text = character;
+            }
         }
 
         private void deactivateButton(Button button) 
         {
             button.Enabled = false;
+            this.clickedButtons.Add(button);
+        }
+        private void changeHangManStatus()
+        {
+            if (this.canPlay) {
+                this.currentHangManStatus++;
+                this.currentHangManStatus %= this.statusImages.Count();
+                shownImageBox.Image = this.statusImages[this.currentHangManStatus.ToString()];
+            }
+
+        }
+
+        private bool checkIfPlayable() 
+        {
+            bool isPlayable = true;
+            if (this.currentWord.Length == this.wordCharactersGuessed || this.currentHangManStatus == this.statusImages.Count()) 
+            {
+                tryAgainBtn.Enabled = true;
+                tryAgainBtn.Visible = true;
+                isPlayable = false;
+            }
+            return isPlayable;
+        }
+
+        private void activateButtons() 
+        {
+            foreach (Button button in this.clickedButtons) 
+            {
+                button.Enabled = true;
+            }
+        }
+
+        private void tryAgainBtn_Click(object sender, EventArgs e)
+        {
+            activateButtons();
+            InitializeAttributes();
+            startGame();
         }
     }
 }
