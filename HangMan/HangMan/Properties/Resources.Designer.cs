@@ -63,9 +63,9 @@ namespace HangMan.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap chest {
+        internal static System.Drawing.Bitmap _0 {
             get {
-                object obj = ResourceManager.GetObject("chest", resourceCulture);
+                object obj = ResourceManager.GetObject("_0", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -73,9 +73,9 @@ namespace HangMan.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap chest1 {
+        internal static System.Drawing.Bitmap _1 {
             get {
-                object obj = ResourceManager.GetObject("chest1", resourceCulture);
+                object obj = ResourceManager.GetObject("_1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -83,9 +83,9 @@ namespace HangMan.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap dead {
+        internal static System.Drawing.Bitmap _2 {
             get {
-                object obj = ResourceManager.GetObject("dead", resourceCulture);
+                object obj = ResourceManager.GetObject("_2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -93,9 +93,9 @@ namespace HangMan.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap dead1 {
+        internal static System.Drawing.Bitmap _3 {
             get {
-                object obj = ResourceManager.GetObject("dead1", resourceCulture);
+                object obj = ResourceManager.GetObject("_3", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -103,9 +103,9 @@ namespace HangMan.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap head {
+        internal static System.Drawing.Bitmap _4 {
             get {
-                object obj = ResourceManager.GetObject("head", resourceCulture);
+                object obj = ResourceManager.GetObject("_4", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -113,9 +113,9 @@ namespace HangMan.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap head1 {
+        internal static System.Drawing.Bitmap _5 {
             get {
-                object obj = ResourceManager.GetObject("head1", resourceCulture);
+                object obj = ResourceManager.GetObject("_5", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -123,79 +123,9 @@ namespace HangMan.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap noMan {
+        internal static System.Drawing.Bitmap _6 {
             get {
-                object obj = ResourceManager.GetObject("noMan", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap noMan1 {
-            get {
-                object obj = ResourceManager.GetObject("noMan1", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap oneArm {
-            get {
-                object obj = ResourceManager.GetObject("oneArm", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap oneArm1 {
-            get {
-                object obj = ResourceManager.GetObject("oneArm1", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap oneLeg {
-            get {
-                object obj = ResourceManager.GetObject("oneLeg", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap oneLeg1 {
-            get {
-                object obj = ResourceManager.GetObject("oneLeg1", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap twoLeg {
-            get {
-                object obj = ResourceManager.GetObject("twoLeg", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap twoLeg1 {
-            get {
-                object obj = ResourceManager.GetObject("twoLeg1", resourceCulture);
+                object obj = ResourceManager.GetObject("_6", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -361,6 +291,88 @@ namespace HangMan.Properties {
         internal static string words1 {
             get {
                 return ResourceManager.GetString("words1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Apple
+        ///Car
+        ///Dog
+        ///Moon
+        ///Beach
+        ///Smile
+        ///House
+        ///River
+        ///Train
+        ///Music
+        ///Chair
+        ///Ocean
+        ///Lemon
+        ///Cloud
+        ///Light
+        ///Flower
+        ///Fruit
+        ///Pizza
+        ///Tiger
+        ///Snake
+        ///Mouse
+        ///Sheep
+        ///Earth
+        ///Bridge
+        ///Paint
+        ///Honey
+        ///Sword
+        ///Crown
+        ///Globe
+        ///Bread
+        ///Robot
+        ///Horse
+        ///Jelly
+        ///Ghost
+        ///Radio
+        ///Shoes
+        ///Mango
+        ///Brush
+        ///Wings
+        ///Cactus
+        ///Candle
+        ///Pearl
+        ///Donkey
+        ///Lizard
+        ///Bubble
+        ///Spoon
+        ///Shell
+        ///Clock
+        ///Grass
+        ///Knife
+        ///Key
+        ///Leaf
+        ///Magic
+        ///Duck
+        ///Peach
+        ///Smile
+        ///Sunny
+        ///Candy
+        ///Crown
+        ///Snake
+        ///Bridge
+        ///Pizza
+        ///Paint
+        ///Light
+        ///Lemon
+        ///Horse
+        ///Smile
+        ///Beach
+        ///Ghost
+        ///Bread
+        ///Globe
+        ///Robot
+        ///Wings
+        ///Ch [resto de la cadena truncado]&quot;;.
+        /// </summary>
+        internal static string words2 {
+            get {
+                return ResourceManager.GetString("words2", resourceCulture);
             }
         }
     }

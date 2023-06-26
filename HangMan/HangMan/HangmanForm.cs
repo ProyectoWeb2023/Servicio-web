@@ -15,10 +15,12 @@ namespace HangMan
     {
         private readonly int buttonWidth = 50;
         private readonly int buttonHeight = 45;
-        private readonly int worldLenghtLimit = 10;
-        private List<Button> buttons;
-        private List<String> wordList;
+        private List<Button> wordLengthBtns;
+        private List<String> wordsList;
+        private Dictionary<string, Image> statusImages;
         private Random random;
+        private string currentWord;
+        private int currentHangManStatus = 0;
 
         public HangManForm()
         {
@@ -29,12 +31,31 @@ namespace HangMan
 
         private void InitializeAttributes()
         {
-            this.buttons = new List<Button>();
-            this.wordList = new List<String>();
+            this.wordLengthBtns = new List<Button>();
+            this.wordsList = new List<String>();
+            this.statusImages = new Dictionary<string, Image>();
+            this.currentWord = String.Empty;
             this.random = new Random();
-            this.wordList = readFile();
-            this.buttons = AddButtons(GetRandomWord().Length);
-            loadButtonsToGroupBox();
+            this.wordsList = readFile();
+            this.currentWord = GetRandomWord();
+            this.wordLengthBtns = AddButtons(currentWord.Length);
+            this.statusImages = loadHangManstatus();
+        }
+
+        private Dictionary<string, Image> loadHangManstatus()
+        {
+            Dictionary<string, Image> imagesDictionary = new Dictionary<string, Image>
+            {
+                { "0", Properties.Resources._0 },
+                { "1", Properties.Resources._1 },
+                { "2" , Properties.Resources._2 },
+                { "3" , Properties.Resources._3 },
+                { "4" , Properties.Resources._4 },
+                { "5" , Properties.Resources._5 },
+                { "6" , Properties.Resources._6 },
+    
+            };
+            return imagesDictionary;
         }
 
         private List<string> readFile()
@@ -59,18 +80,18 @@ namespace HangMan
         }
         public string GetRandomWord()
         {
-            if (this.wordList.Count == 0)
+            if (this.wordsList.Count == 0)
             {
                 throw new ArgumentException("The word list is empty.");
             }
 
-            int randomIndex = random.Next(0, this.wordList.Count);
-            return this.wordList[randomIndex];
+            int randomIndex = random.Next(0, this.wordsList.Count);
+            return this.wordsList[randomIndex];
         }
 
         private void loadButtonsToGroupBox() 
         {
-            foreach (Button button in buttons)
+            foreach (Button button in wordLengthBtns)
             {
                wordGroupBox.Controls.Add(button);
             }
@@ -78,61 +99,56 @@ namespace HangMan
 
         private void startGame() 
         {
+            loadButtonsToGroupBox();
             DisplayButtons();
 
         }
 
         private void DisplayButtons()
         {
-            int totalButtonWidth = buttons.Count * buttonWidth; // Total width of all buttons
-            int buttonSpacing = 10; // Horizontal spacing between buttons
+            int totalButtonWidth = wordLengthBtns.Count * buttonWidth;
+            int buttonSpacing = 10;
 
-            // Calculate the horizontal offset for centering
-            int offsetX = (wordGroupBox.Width - totalButtonWidth - (buttonSpacing * (buttons.Count - 1))) / 2;
+            int offsetX = (wordGroupBox.Width - totalButtonWidth - (buttonSpacing * (wordLengthBtns.Count - 1))) / 2;
 
-            int x = offsetX; // X position
-            int y = 10; // Y position
+            int x = offsetX;
+            int y = 10;
 
-            foreach (Button button in buttons)
+            foreach (Button button in wordLengthBtns)
             {
-                // Set the position of the button
                 button.Location = new Point(x, y);
-
-                // Update the X position for the next button
                 x += button.Width + buttonSpacing;
             }
         }
-        private void KeyPressed(object sender, EventArgs e)
+
+        private void keyPressed(object sender, EventArgs e)
         {
             Button keyPressed = (Button)sender;
             topScoreButton.Text = keyPressed.Text;
         }
 
-        private void pictureBox1_Click(object sender, EventArgs e)
+        private void changeHangManStatus() 
         {
-            pictureBox1.Image = Properties.Resources.noMan;
-
+            this.currentHangManStatus++;
+            this.currentHangManStatus%=this.statusImages.Count();
+            shownImageBox.Image = this.statusImages[this.currentHangManStatus.ToString()];
         }
 
-
-        private void HangMan_Load(object sender, EventArgs e)
+        private int checkLetter(string keyPressed) 
         {
-
+            char characterChosen = char.Parse(keyPressed);
+            int index = this.currentWord.IndexOf(characterChosen);
+            return index; // index != -1 to check if true or false
         }
 
-        private void button1_Click_1(object sender, EventArgs e)
+        private void changeWordLengthBtns(int position, char character) 
         {
-
+            this.wordLengthBtns[position].Text = character.ToString();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void deactivateButton(Button button) 
         {
-
-        }
-
-        private void groupBox1_Enter(object sender, EventArgs e)
-        {
-
+            button.Enabled = false;
         }
     }
 }

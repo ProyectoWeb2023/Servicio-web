@@ -59,8 +59,8 @@ namespace HangMan
             this.QButton = new System.Windows.Forms.Button();
             this.topScoreButton = new System.Windows.Forms.Button();
             this.wordGroupBox = new System.Windows.Forms.GroupBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.shownImageBox = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.shownImageBox)).BeginInit();
             this.SuspendLayout();
             // 
             // button20
@@ -73,7 +73,7 @@ namespace HangMan
             this.button20.TabIndex = 55;
             this.button20.Text = "M";
             this.button20.UseVisualStyleBackColor = true;
-            this.button20.Click += new System.EventHandler(this.KeyPressed);
+            this.button20.Click += new System.EventHandler(this.keyPressed);
             // 
             // button21
             // 
@@ -85,7 +85,7 @@ namespace HangMan
             this.button21.TabIndex = 54;
             this.button21.Text = "N";
             this.button21.UseVisualStyleBackColor = true;
-            this.button21.Click += new System.EventHandler(this.KeyPressed);
+            this.button21.Click += new System.EventHandler(this.keyPressed);
             // 
             // button22
             // 
@@ -97,7 +97,7 @@ namespace HangMan
             this.button22.TabIndex = 53;
             this.button22.Text = "B";
             this.button22.UseVisualStyleBackColor = true;
-            this.button22.Click += new System.EventHandler(this.KeyPressed);
+            this.button22.Click += new System.EventHandler(this.keyPressed);
             // 
             // button23
             // 
@@ -109,7 +109,7 @@ namespace HangMan
             this.button23.TabIndex = 52;
             this.button23.Text = "V";
             this.button23.UseVisualStyleBackColor = true;
-            this.button23.Click += new System.EventHandler(this.KeyPressed);
+            this.button23.Click += new System.EventHandler(this.keyPressed);
             // 
             // button24
             // 
@@ -121,7 +121,7 @@ namespace HangMan
             this.button24.TabIndex = 51;
             this.button24.Text = "C";
             this.button24.UseVisualStyleBackColor = true;
-            this.button24.Click += new System.EventHandler(this.KeyPressed);
+            this.button24.Click += new System.EventHandler(this.keyPressed);
             // 
             // button25
             // 
@@ -133,7 +133,7 @@ namespace HangMan
             this.button25.TabIndex = 50;
             this.button25.Text = "X";
             this.button25.UseVisualStyleBackColor = true;
-            this.button25.Click += new System.EventHandler(this.KeyPressed);
+            this.button25.Click += new System.EventHandler(this.keyPressed);
             // 
             // button26
             // 
@@ -145,7 +145,7 @@ namespace HangMan
             this.button26.TabIndex = 49;
             this.button26.Text = "Z";
             this.button26.UseVisualStyleBackColor = true;
-            this.button26.Click += new System.EventHandler(this.KeyPressed);
+            this.button26.Click += new System.EventHandler(this.keyPressed);
             // 
             // button12
             // 
@@ -157,7 +157,7 @@ namespace HangMan
             this.button12.TabIndex = 48;
             this.button12.Text = "K";
             this.button12.UseVisualStyleBackColor = true;
-            this.button12.Click += new System.EventHandler(this.KeyPressed);
+            this.button12.Click += new System.EventHandler(this.keyPressed);
             // 
             // button13
             // 
@@ -169,7 +169,7 @@ namespace HangMan
             this.button13.TabIndex = 47;
             this.button13.Text = "J";
             this.button13.UseVisualStyleBackColor = true;
-            this.button13.Click += new System.EventHandler(this.KeyPressed);
+            this.button13.Click += new System.EventHandler(this.keyPressed);
             // 
             // button14
             // 
@@ -181,7 +181,7 @@ namespace HangMan
             this.button14.TabIndex = 46;
             this.button14.Text = "H";
             this.button14.UseVisualStyleBackColor = true;
-            this.button14.Click += new System.EventHandler(this.KeyPressed);
+            this.button14.Click += new System.EventHandler(this.keyPressed);
             // 
             // button15
             // 
@@ -193,7 +193,7 @@ namespace HangMan
             this.button15.TabIndex = 45;
             this.button15.Text = "G";
             this.button15.UseVisualStyleBackColor = true;
-            this.button15.Click += new System.EventHandler(this.KeyPressed);
+            this.button15.Click += new System.EventHandler(this.keyPressed);
             // 
             // button16
             // 
@@ -205,7 +205,7 @@ namespace HangMan
             this.button16.TabIndex = 44;
             this.button16.Text = "F";
             this.button16.UseVisualStyleBackColor = true;
-            this.button16.Click += new System.EventHandler(this.KeyPressed);
+            this.button16.Click += new System.EventHandler(this.keyPressed);
             // 
             // button17
             // 
@@ -217,7 +217,7 @@ namespace HangMan
             this.button17.TabIndex = 43;
             this.button17.Text = "D";
             this.button17.UseVisualStyleBackColor = true;
-            this.button17.Click += new System.EventHandler(this.KeyPressed);
+            this.button17.Click += new System.EventHandler(this.keyPressed);
             // 
             // button18
             // 
@@ -229,7 +229,7 @@ namespace HangMan
             this.button18.TabIndex = 42;
             this.button18.Text = "S";
             this.button18.UseVisualStyleBackColor = true;
-            this.button18.Click += new System.EventHandler(this.KeyPressed);
+            this.button18.Click += new System.EventHandler(this.keyPressed);
             // 
             // button19
             // 
@@ -241,7 +241,7 @@ namespace HangMan
             this.button19.TabIndex = 41;
             this.button19.Text = "A";
             this.button19.UseVisualStyleBackColor = true;
-            this.button19.Click += new System.EventHandler(this.KeyPressed);
+            this.button19.Click += new System.EventHandler(this.keyPressed);
             // 
             // button9
             // 
@@ -253,7 +253,7 @@ namespace HangMan
             this.button9.TabIndex = 40;
             this.button9.Text = "L";
             this.button9.UseVisualStyleBackColor = true;
-            this.button9.Click += new System.EventHandler(this.KeyPressed);
+            this.button9.Click += new System.EventHandler(this.keyPressed);
             // 
             // button10
             // 
@@ -265,7 +265,7 @@ namespace HangMan
             this.button10.TabIndex = 39;
             this.button10.Text = "P";
             this.button10.UseVisualStyleBackColor = true;
-            this.button10.Click += new System.EventHandler(this.KeyPressed);
+            this.button10.Click += new System.EventHandler(this.keyPressed);
             // 
             // button11
             // 
@@ -277,7 +277,7 @@ namespace HangMan
             this.button11.TabIndex = 38;
             this.button11.Text = "O";
             this.button11.UseVisualStyleBackColor = true;
-            this.button11.Click += new System.EventHandler(this.KeyPressed);
+            this.button11.Click += new System.EventHandler(this.keyPressed);
             // 
             // button5
             // 
@@ -289,7 +289,7 @@ namespace HangMan
             this.button5.TabIndex = 37;
             this.button5.Text = "I";
             this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.KeyPressed);
+            this.button5.Click += new System.EventHandler(this.keyPressed);
             // 
             // button6
             // 
@@ -301,7 +301,7 @@ namespace HangMan
             this.button6.TabIndex = 36;
             this.button6.Text = "U";
             this.button6.UseVisualStyleBackColor = true;
-            this.button6.Click += new System.EventHandler(this.KeyPressed);
+            this.button6.Click += new System.EventHandler(this.keyPressed);
             // 
             // button7
             // 
@@ -313,7 +313,7 @@ namespace HangMan
             this.button7.TabIndex = 35;
             this.button7.Text = "Y";
             this.button7.UseVisualStyleBackColor = true;
-            this.button7.Click += new System.EventHandler(this.KeyPressed);
+            this.button7.Click += new System.EventHandler(this.keyPressed);
             // 
             // button8
             // 
@@ -325,7 +325,7 @@ namespace HangMan
             this.button8.TabIndex = 34;
             this.button8.Text = "T";
             this.button8.UseVisualStyleBackColor = true;
-            this.button8.Click += new System.EventHandler(this.KeyPressed);
+            this.button8.Click += new System.EventHandler(this.keyPressed);
             // 
             // button3
             // 
@@ -337,7 +337,7 @@ namespace HangMan
             this.button3.TabIndex = 33;
             this.button3.Text = "R";
             this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.KeyPressed);
+            this.button3.Click += new System.EventHandler(this.keyPressed);
             // 
             // button4
             // 
@@ -349,7 +349,7 @@ namespace HangMan
             this.button4.TabIndex = 32;
             this.button4.Text = "E";
             this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.KeyPressed);
+            this.button4.Click += new System.EventHandler(this.keyPressed);
             // 
             // button2
             // 
@@ -361,7 +361,7 @@ namespace HangMan
             this.button2.TabIndex = 31;
             this.button2.Text = "W";
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.KeyPressed);
+            this.button2.Click += new System.EventHandler(this.keyPressed);
             // 
             // QButton
             // 
@@ -373,7 +373,7 @@ namespace HangMan
             this.QButton.TabIndex = 30;
             this.QButton.Text = "Q";
             this.QButton.UseVisualStyleBackColor = true;
-            this.QButton.Click += new System.EventHandler(this.KeyPressed);
+            this.QButton.Click += new System.EventHandler(this.keyPressed);
             // 
             // topScoreButton
             // 
@@ -384,7 +384,6 @@ namespace HangMan
             this.topScoreButton.TabIndex = 28;
             this.topScoreButton.Text = "Top Scores";
             this.topScoreButton.UseVisualStyleBackColor = true;
-            this.topScoreButton.Click += new System.EventHandler(this.button1_Click_1);
             // 
             // wordGroupBox
             // 
@@ -393,19 +392,17 @@ namespace HangMan
             this.wordGroupBox.Size = new System.Drawing.Size(661, 65);
             this.wordGroupBox.TabIndex = 56;
             this.wordGroupBox.TabStop = false;
-            this.wordGroupBox.Enter += new System.EventHandler(this.groupBox1_Enter);
             // 
-            // pictureBox1
+            // shownImageBox
             // 
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(443, 14);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(5);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(504, 364);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 29;
-            this.pictureBox1.TabStop = false;
-            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
+            this.shownImageBox.Image = ((System.Drawing.Image)(resources.GetObject("shownImageBox.Image")));
+            this.shownImageBox.Location = new System.Drawing.Point(443, 14);
+            this.shownImageBox.Margin = new System.Windows.Forms.Padding(5);
+            this.shownImageBox.Name = "shownImageBox";
+            this.shownImageBox.Size = new System.Drawing.Size(504, 364);
+            this.shownImageBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.shownImageBox.TabIndex = 29;
+            this.shownImageBox.TabStop = false;
             // 
             // HangManForm
             // 
@@ -439,15 +436,14 @@ namespace HangMan
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.QButton);
-            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.shownImageBox);
             this.Controls.Add(this.topScoreButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "HangManForm";
             this.Text = "Hangman Game";
-            this.Load += new System.EventHandler(this.Form1_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.shownImageBox)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -480,7 +476,7 @@ namespace HangMan
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button QButton;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox shownImageBox;
         private System.Windows.Forms.Button topScoreButton;
         private GroupBox wordGroupBox;
     }

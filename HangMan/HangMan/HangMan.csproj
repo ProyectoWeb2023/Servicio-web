@@ -137,5 +137,26 @@
   <ItemGroup>
     <None Include="Images\words.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\0.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\5.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\6.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
