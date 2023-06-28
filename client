@@ -1,0 +1,44 @@
+<?php
+
+// URL del servidor
+$serverUrl = 'http://tu-servidor.com/tu-archivo-php.php';
+
+// Datos de la solicitud JSON-RPC
+$requestData = array(
+    'jsonrpc' => '2.0',
+    'method' => 'getWordLenght',
+    'params' => array(),
+    'id' => 1
+);
+
+// Codificar la solicitud como JSON
+$jsonRequest = json_encode($requestData);
+
+// Configurar las opciones de la solicitud HTTP
+$options = array(
+    'http' => array(
+        'method' => 'POST',
+        'header' => 'Content-Type: application/json',
+        'content' => $jsonRequest
+    )
+);
+
+// Crear el contexto de la solicitud
+$context = stream_context_create($options);
+
+// Realizar la solicitud HTTP al servidor
+$response = file_get_contents($serverUrl, false, $context);
+
+// Decodificar la respuesta JSON
+$jsonResponse = json_decode($response, true);
+
+// Verificar si la respuesta contiene errores
+if (isset($jsonResponse['error'])) {
+    // Manejar el error
+    echo 'Error: ' . $jsonResponse['error']['message'];
+} else {
+    // Obtener el resultado
+    $result = $jsonResponse['result'];
+    echo 'Longitud de la palabra: ' . $result;
+}
+?>
