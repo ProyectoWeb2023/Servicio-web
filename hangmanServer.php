@@ -34,8 +34,18 @@ if (!isset($_SESSION['word'])) {
 // Función para obtener una palabra aleatoria
 function getRandWord()
 {
-    $words = array('casa', 'canario', 'zanahoria', 'manteca', 'semilla');
-    return $words[array_rand($words)];
+    // $words = array('casa', 'canario', 'zanahoria', 'manteca', 'semilla');
+    // return $words[array_rand($words)];
+    $fileLines = file('words.txt', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    $words = [];
+
+    foreach ($fileLines as $line) {
+        $lineWords = explode("\r\n", $line);
+        $words = array_merge($words, $lineWords);
+    }
+
+    $randomWord = $words[array_rand($words)];
+    return $randomWord;
 }
 
 // Función para obtener el tamaño de la palabra
@@ -99,12 +109,13 @@ function isLoser()
 
 $server->getProcedureHandler()
     ->withCallback('greet', Closure::fromCallable('greet'))
-    ->withCallback('addNumbers', Closure::fromCallable('addNumbers'));
+    ->withCallback('addNumbers', Closure::fromCallable('addNumbers'))
+    ->withCallback('getRandWord', Closure::fromCallable('getRandWord'));
 
 // Define the greet function
 function greet($params)
 {
-    $name = $params;
+    $name = $params[0];
     $greeting = 'Hello, ' . $name . '!';
     return $greeting;
 }
@@ -112,8 +123,8 @@ function greet($params)
 // Define the addNumbers function
 function addNumbers($params)
 {
-    $a = isset($params[0]) ? intval($params[0]) : 0;
-    $b = isset($params[1]) ? intval($params[1]) : 0;
+    $a = $params[0];
+    $b = $params[1];
     $sum = $a + $b;
     return $sum;
 }

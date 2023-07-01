@@ -17,11 +17,17 @@ namespace HangMan
         [JsonProperty("id")]
         public string Id { get; set; }
 
-        public JsonRpcRequest(string method, object parameters = null)
+        public JsonRpcRequest(string method, object parameters)
         {
             this.JsonRpc = "2.0";
             this.Method = method;
-            this.Params = parameters ?? new { param = "null" };
+            this.Params = parameters;
+            this.Id = Guid.NewGuid().ToString();
+        }
+        public JsonRpcRequest(string method)
+        {
+            this.JsonRpc = "2.0";
+            this.Method = method;
             this.Id = Guid.NewGuid().ToString();
         }
     }
