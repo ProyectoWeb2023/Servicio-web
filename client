@@ -41,4 +41,3 @@ if (isset($jsonResponse['error'])) {
     $result = $jsonResponse['result'];
     echo 'Longitud de la palabra: ' . $result;
 }
-?>

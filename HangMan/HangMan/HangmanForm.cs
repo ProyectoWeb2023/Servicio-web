@@ -4,6 +4,12 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
+using System.Net.Http;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using System.Text;
+using System.Security.Cryptography;
+
 namespace HangMan
 {
     public partial class HangManForm : Form
@@ -12,7 +18,7 @@ namespace HangMan
         private readonly int buttonHeight = 45;
         private List<Button> wordLengthBtns;
         private List<Button> clickedButtons;
-        private List<String> wordsList;
+        //private List<String> wordsList;
         private Dictionary<string, Image> statusImages;
         private Random random;
         private string currentWord;
@@ -23,14 +29,15 @@ namespace HangMan
         public HangManForm()
         {
             InitializeComponent();
-            InitializeAttributes();
-            startGame();
+            //InitializeAttributes();
+            //startGame();
+            MakeJsonRpcRequest("addNumbers", new[] { new { a = 5, b = 3 } });
         }
 
         private void InitializeAttributes()
         {
             this.wordLengthBtns = new List<Button>();
-            this.wordsList = new List<String>();
+            //this.wordsList = new List<String>();
             this.clickedButtons = new List<Button>();
             this.statusImages = new Dictionary<string, Image>();
             this.random = new Random();
@@ -38,7 +45,7 @@ namespace HangMan
             this.wordCharactersGuessed = 0;
             this.currentHangManStatus = 0;
             this.canPlay = true;
-            this.wordsList = readFile();
+            //this.wordsList = readFile();
             this.currentWord = GetRandomWord();
             this.currentWord = this.currentWord.ToUpper();
             this.wordLengthBtns = AddButtons(currentWord.Length);
@@ -85,13 +92,20 @@ namespace HangMan
 
         public string GetRandomWord()
         {
-            if (this.wordsList.Count == 0)
-            {
-                throw new ArgumentException("The word list is empty.");
-            }
+            //var method = "getRandWord";
+            //var jsonResponse = await SendJsonRpcRequest(method);
+            //dynamic response = JsonConvert.DeserializeObject(jsonResponse);
+            //var result = response.result;
+            //var error = response.error;
+            //var id = response.id;
+            //if (this.wordsList.Count == 0)
+            //{
+            //    throw new ArgumentException("The word list is empty.");
+            //}
 
-            int randomIndex = random.Next(0, this.wordsList.Count);
-            return this.wordsList[randomIndex];
+            //int randomIndex = random.Next(0, this.wordsList.Count);
+            //return this.wordsList[randomIndex];
+            return " a";
         }
 
         private void startGame() 
@@ -231,6 +245,93 @@ namespace HangMan
             foreach (Button button in wordLengthBtns)
             {
                 wordGroupBox.Controls.Remove(button);
+            }
+        }
+        private async Task<string> SendJsonRpcRequest(string method, object[] parameters = null)
+        {
+            // JSON-RPC request object
+            var request = new JsonRpcRequest(method, parameters);
+ 
+            // Serialize the request object to JSON
+            var jsonRequest = JsonConvert.SerializeObject(request);
+
+            // Set up HttpClient to send the request
+            using (var client = new HttpClient())
+            {
+                var content = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
+
+                // Send the POST request to the server
+                var response = await client.PostAsync("https://titanic.ecci.ucr.ac.cr/~eb95811/servicios_web/hangmanServer.php", content);
+
+                // Read the response content as string
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+
+                return jsonResponse;
+            }
+        }
+
+        private async void MakeJsonRpcRequest(string method, object parameters = null)
+        {
+            var url = "https://titanic.ecci.ucr.ac.cr/~eb95811/servicios_web/hangmanServer.php"; // Replace with your server URL
+
+            // Prepare the JSON-RPC request
+            //var request = new JsonRpcRequest(method, parameters);
+            var request = new JsonRpcRequest("addNumbers", new[] { "53" });
+            //var request = new
+            //{
+            //    jsonrpc = "2.0",
+            //    method = "greet",
+            //    @params = new[] { "Karen" },
+            //    id = 1
+            //};
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    var jsonRequest = JsonConvert.SerializeObject(request);
+
+                    // Send the JSON-RPC request to the server
+                    var response = await client.PostAsync(url, new StringContent(jsonRequest, Encoding.UTF8, "application/json"));
+
+                    // Read the response content as JSON string
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+
+                    // Deserialize the JSON response
+                    dynamic responseObject = JsonConvert.DeserializeObject(jsonResponse);
+
+                    // Handle the JSON-RPC response
+                    if (responseObject != null)
+                    {
+                        if (responseObject.error != null)
+                        {
+                            // Handle error response
+                            var error = responseObject.error;
+                            topScoreButton.Text = $"JSON-RPC Error: {error.code} - {error.message}";
+                            Console.WriteLine($"JSON-RPC Error: {error.code} - {error.message}");
+                        }
+                        else if (responseObject.result != null)
+                        {
+                            // Handle successful response
+                            var result = responseObject.result;
+                            topScoreButton.Text = $"JSON-RPC Result: {result}";
+                            Console.WriteLine($"JSON-RPC Result: {result}");
+                        }
+                        else
+                        {
+                            topScoreButton.Text = "Invalid JSON-RPC response";
+                            Console.WriteLine("Invalid JSON-RPC response");
+                        }
+                    }
+                    else
+                    {
+                        topScoreButton.Text = "Empty JSON-RPC response";
+                        Console.WriteLine("Empty JSON-RPC response");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
             }
         }
     }

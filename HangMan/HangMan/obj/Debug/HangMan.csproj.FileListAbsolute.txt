@@ -9,3 +9,6 @@ D:\Respaldo Escritorio DELL\DESKTOP\Escritorio 2\GitHub\Servicio-web\HangMan\Han
 D:\Respaldo Escritorio DELL\DESKTOP\Escritorio 2\GitHub\Servicio-web\HangMan\HangMan\obj\Debug\HangMan.exe
 D:\Respaldo Escritorio DELL\DESKTOP\Escritorio 2\GitHub\Servicio-web\HangMan\HangMan\obj\Debug\HangMan.pdb
 D:\Respaldo Escritorio DELL\DESKTOP\Escritorio 2\GitHub\Servicio-web\HangMan\HangMan\obj\Debug\HangMan.HangManForm.resources
+D:\Respaldo Escritorio DELL\DESKTOP\Escritorio 2\GitHub\Servicio-web\HangMan\HangMan\bin\Debug\Newtonsoft.Json.dll
+D:\Respaldo Escritorio DELL\DESKTOP\Escritorio 2\GitHub\Servicio-web\HangMan\HangMan\bin\Debug\Newtonsoft.Json.xml
+D:\Respaldo Escritorio DELL\DESKTOP\Escritorio 2\GitHub\Servicio-web\HangMan\HangMan\obj\Debug\HangMan.csproj.CopyComplete
