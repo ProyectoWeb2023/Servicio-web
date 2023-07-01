@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Text;
 using System.Security.Cryptography;
+using System.Runtime.CompilerServices;
 
 namespace HangMan
 {
@@ -17,11 +18,14 @@ namespace HangMan
         private readonly int buttonWidth = 50;
         private readonly int buttonHeight = 45;
         private readonly string randWordMethod = "getRandWord";
+        private readonly string isWinnerMethod = "isWinner";
+        private readonly string isLoserMethod = "isLoser";
+
 
         private List<Button> guessWordLengthBtns;
         private List<Button> clickedButtons;
-        //private List<String> wordsList;
         private Dictionary<string, Image> statusImages;
+
         private string currentWord;
         private int wordCharactersGuessed;
         private int currentHangManStatus;
@@ -32,22 +36,17 @@ namespace HangMan
             InitializeComponent();
             InitializeAttributes();
             startGameAsync();
-            //Task<dynamic> task = MakeJsonRpcRequestWithParam("getRandWord");
-            //Task<string> task = GetRandomWordAsync("getRandWord"); // delete this
-
         }
 
         private void InitializeAttributes()
         {
             this.guessWordLengthBtns = new List<Button>();
-            //this.wordsList = new List<String>();
             this.clickedButtons = new List<Button>();
             this.statusImages = new Dictionary<string, Image>();
             this.currentWord = String.Empty;
             this.wordCharactersGuessed = 0;
             this.currentHangManStatus = 0;
             this.canPlay = true;
-            //this.wordsList = readFile();
         }
 
         private async Task<bool> assignInitialValuesToAttributes() 
@@ -82,14 +81,6 @@ namespace HangMan
     
             };
             return imagesDictionary;
-        }
-
-        private List<string> readFile()
-        {
-            List<String> wordList = new List<String>();
-            string[] words = Properties.Resources.words.Split(new[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
-            wordList.AddRange(words);
-            return wordList;
         }
 
         private List<Button> AddButtons(int count)
@@ -128,7 +119,6 @@ namespace HangMan
                 DisplayButtons();
             }
 
-
         }
 
         private void loadButtonsToGroupBox()
@@ -159,25 +149,27 @@ namespace HangMan
         private void keyPressed(object sender, EventArgs e)
         {
             Button keyPressed = (Button)sender;
-            topScoreButton.Text = this.currentWord;
-            checkEvent(keyPressed);
+            checkEventAsync(keyPressed);
         }
 
-        private void checkEvent(Button key)
+        private async Task checkEventAsync(Button key)
         {
             List<int> possibleCharIndexes;
-            bool isPlayable = checkIfPlayable();
-            if (!isPlayable)
+
+            Task<bool> isPlayable = checkIfPlayableAsync(isWinnerMethod, isLoserMethod);
+            bool isPlayableDynamic = await isPlayable;
+
+            if (!isPlayableDynamic)
             {
                 this.canPlay = false;
             }
-            else 
+            else
             {
                 possibleCharIndexes = checkLetter(key.Text);
                 if (possibleCharIndexes.Count != 0)
                 {
                     changeWordLengthBtns(possibleCharIndexes, key.Text);
-                    this.wordCharactersGuessed+= possibleCharIndexes.Count;
+                    this.wordCharactersGuessed += possibleCharIndexes.Count;
                 }
                 else
                 {
@@ -185,7 +177,7 @@ namespace HangMan
                 }
                 deactivateButton(key);
             }
-            isPlayable = checkIfPlayable();
+            isPlayable = checkIfPlayableAsync(isWinnerMethod, isLoserMethod);
             // TODO: Separate method in "ifWinner" and "ifLoser" to know if the top score file should be modified.
         }
 
@@ -226,16 +218,34 @@ namespace HangMan
 
         }
 
-        private bool checkIfPlayable() 
+        private async Task<bool> checkIfPlayableAsync(string isWinner, string isLoser)
         {
-            bool isPlayable = true;
-            if (this.currentWord.Length == this.wordCharactersGuessed || this.currentHangManStatus+1 == this.statusImages.Count()) 
+
+            Task<bool> isWinnerTask = checkGameCondition(isWinner);
+            Task<bool> isLoserTask = checkGameCondition(isLoser);
+            bool isWinnerDynamic = await isWinnerTask;
+            bool isLoserDynamic = await isLoserTask;
+
+            bool result = false;
+
+            if (!isWinnerDynamic && !isLoserDynamic)
             {
-                tryAgainBtn.Enabled = true;
-                tryAgainBtn.Visible = true;
-                isPlayable = false;
+                result = true;
+                Console.WriteLine($"JSON-RPC Result from randWord: {result}");
             }
-            return isPlayable;
+            return result;
+        }
+
+        private async Task<bool> checkGameCondition(string conditionMethod) 
+        {
+            bool gameEnded = false;
+            Task<dynamic> requestTask = MakeJsonRpcRequestWithParam(conditionMethod);
+            dynamic requestResponse = await requestTask;
+            if (requestResponse != null) 
+            {
+                gameEnded = requestResponse.Value;
+            }
+            return gameEnded;
         }
 
         private void activateButtons() 
