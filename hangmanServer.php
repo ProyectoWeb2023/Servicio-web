@@ -6,21 +6,6 @@ use JsonRPC\Server;
 
 $server = new Server();
 
-class MyService
-{
-    public function greet($name)
-    {
-        $greeting = 'Hello, ' . $name . '!';
-        return $greeting;
-    }
-
-    public function addNumbers($a, $b)
-    {
-        $sum = $a + $b;
-        return $sum;
-    }
-}
-
 // Iniciar sesión
 session_start();
 
@@ -45,6 +30,7 @@ function getRandWord()
     }
 
     $randomWord = $words[array_rand($words)];
+    $randomWord = strtoupper($randomWord);
     return $randomWord;
 }
 
@@ -110,12 +96,15 @@ function isLoser()
 $server->getProcedureHandler()
     ->withCallback('greet', Closure::fromCallable('greet'))
     ->withCallback('addNumbers', Closure::fromCallable('addNumbers'))
-    ->withCallback('getRandWord', Closure::fromCallable('getRandWord'));
+    ->withCallback('getRandWord', Closure::fromCallable('getRandWord'))
+    ->withCallback('isWinner', Closure::fromCallable('isWinner'))
+    ->withCallback('isLoser', Closure::fromCallable('isLoser'))
+    ->withCallback('verifyCharacter', Closure::fromCallable('verifyCharacter'));
 
 // Define the greet function
 function greet($params)
 {
-    $name = $params[0];
+    $name = $params;
     $greeting = 'Hello, ' . $name . '!';
     return $greeting;
 }

@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using System.Text;
 using System.Security.Cryptography;
 using System.Runtime.CompilerServices;
+using System.Xml.Linq;
 
 namespace HangMan
 {
@@ -33,9 +34,10 @@ namespace HangMan
 
         public HangManForm()
         {
-            InitializeComponent();
-            InitializeAttributes();
-            startGameAsync();
+            //InitializeComponent();
+            //InitializeAttributes();
+            //startGameAsync();
+            checkLetter("A");
         }
 
         private void InitializeAttributes()
@@ -58,7 +60,7 @@ namespace HangMan
             {
                 this.currentWord = task.Result;
                 topScoreButton.Text = this.currentWord;
-                this.currentWord = this.currentWord.ToUpper();
+                //this.currentWord = this.currentWord.ToUpper();
                 this.guessWordLengthBtns = AddButtons(currentWord.Length);
                 this.statusImages = loadHangManstatus();
                 shownImageBox.Image = this.statusImages[this.currentHangManStatus.ToString()];
@@ -184,14 +186,17 @@ namespace HangMan
         private List<int> checkLetter(string keyPressed) 
         {
             List<int> indexes = new List<int>();
-            char characterChosen = char.Parse(keyPressed);
-            for (int index = 0; index < this.currentWord.Length; index++)
-            {
-                if (this.currentWord[index] == characterChosen)
-                {
-                    indexes.Add(index);
-                }
-            }
+            //char characterChosen = char.Parse(keyPressed);
+            //for (int index = 0; index < this.currentWord.Length; index++)
+            //{
+            //    if (this.currentWord[index] == characterChosen)
+            //    {
+            //        indexes.Add(index);
+            //    }
+            //}
+            var request =  MakeJsonRpcRequestWithParam("greet", new object[] { "John" });
+
+
             return indexes;
         }
 
