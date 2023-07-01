@@ -32,14 +32,8 @@ namespace HangMan
             //InitializeAttributes();
             //startGame();
             //Task<dynamic> task = MakeJsonRpcRequestWithParam("getRandWord");
-            //dummy();
-            Task<string> task = GetRandomWord("getRandWord"); // delete this
+            Task<string> task = GetRandomWordAsync("getRandWord"); // delete this
 
-        }
-
-        private void dummy() 
-        {
-            Task<dynamic> task = MakeJsonRpcRequestWithParam("getRandWord");
         }
 
         private void InitializeAttributes()
@@ -54,7 +48,7 @@ namespace HangMan
             this.currentHangManStatus = 0;
             this.canPlay = true;
             //this.wordsList = readFile();
-            this.currentWord = GetRandomWord("getRandWord").Result;
+            this.currentWord = GetRandomWordAsync("getRandWord").Result;
             topScoreButton.Text = this.currentWord;
             this.currentWord = this.currentWord.ToUpper();
             this.wordLengthBtns = AddButtons(currentWord.Length);
@@ -99,15 +93,16 @@ namespace HangMan
             return buttonList;
         }
 
-        public async Task<string> GetRandomWord(string method)
+        public async Task<string> GetRandomWordAsync(string method)
         {
-            Task<dynamic> task = await MakeJsonRpcRequestWithParam("getRandWord");
+            Task<dynamic> requestTask = MakeJsonRpcRequestWithParam("getRandWord");
+            dynamic taskDynamic = await requestTask;
             string result = "Default";
-            if (task != null)
+            if (taskDynamic != null)
             {
-                result = task.Result;
-                topScoreButton.Text = $"JSON-RPC Result: {result}";
-                Console.WriteLine($"JSON-RPC Result: {result}");
+                result = requestTask.Result;
+                topScoreButton.Text = result;
+                Console.WriteLine($"JSON-RPC Result from randWord: {result}");
             }
             return result;
         }
@@ -251,7 +246,8 @@ namespace HangMan
                 wordGroupBox.Controls.Remove(button);
             }
         }
-        private async Task<dynamic> MakeJsonRpcRequestWithParam(string method, object parameters = null)
+        
+        private static async Task<dynamic> MakeJsonRpcRequestWithParam(string method, object parameters = null)
         {
             dynamic result = null;
             var url = "https://titanic.ecci.ucr.ac.cr/~eb95811/servicios_web/hangmanServer.php"; // Replace with your server URL
@@ -287,7 +283,7 @@ namespace HangMan
                             // Handle successful response
                             result = responseObject.result;
                             Console.WriteLine($"JSON-RPC Result: {result}");
-                            topScoreButton.Text = result;
+                            //topScoreButton.Text = result;
                         }
                         else
                         {
