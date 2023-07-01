@@ -31,9 +31,15 @@ namespace HangMan
             InitializeComponent();
             //InitializeAttributes();
             //startGame();
-            Task<dynamic> task = MakeJsonRpcRequestWithParam("getRandWord");
-            GetRandomWord("getRandWord"); // delete this
+            //Task<dynamic> task = MakeJsonRpcRequestWithParam("getRandWord");
+            //dummy();
+            Task<string> task = GetRandomWord("getRandWord"); // delete this
 
+        }
+
+        private void dummy() 
+        {
+            Task<dynamic> task = MakeJsonRpcRequestWithParam("getRandWord");
         }
 
         private void InitializeAttributes()
@@ -48,7 +54,7 @@ namespace HangMan
             this.currentHangManStatus = 0;
             this.canPlay = true;
             //this.wordsList = readFile();
-            this.currentWord = GetRandomWord("getRandWord");
+            this.currentWord = GetRandomWord("getRandWord").Result;
             topScoreButton.Text = this.currentWord;
             this.currentWord = this.currentWord.ToUpper();
             this.wordLengthBtns = AddButtons(currentWord.Length);
@@ -93,9 +99,9 @@ namespace HangMan
             return buttonList;
         }
 
-        public string GetRandomWord(string method)
+        public async Task<string> GetRandomWord(string method)
         {
-            Task<dynamic> task = MakeJsonRpcRequestWithParam(method).Result;
+            Task<dynamic> task = await MakeJsonRpcRequestWithParam("getRandWord");
             string result = "Default";
             if (task != null)
             {
@@ -247,7 +253,7 @@ namespace HangMan
         }
         private async Task<dynamic> MakeJsonRpcRequestWithParam(string method, object parameters = null)
         {
-            dynamic result = string.Empty;
+            dynamic result = null;
             var url = "https://titanic.ecci.ucr.ac.cr/~eb95811/servicios_web/hangmanServer.php"; // Replace with your server URL
 
             // Prepare the JSON-RPC request
@@ -268,13 +274,29 @@ namespace HangMan
                     dynamic responseObject = JsonConvert.DeserializeObject(jsonResponse);
 
                     // Handle the JSON-RPC response
-                    if (responseObject.error != null && responseObject.result != null)
+                    if (responseObject != null)
                     {
-                        result = responseObject;
+                        if (responseObject.error != null)
+                        {
+                            // Handle error response
+                            var error = responseObject.error;
+                            Console.WriteLine($"JSON-RPC Error: {error.code} - {error.message}");
+                        }
+                        else if (responseObject.result != null)
+                        {
+                            // Handle successful response
+                            result = responseObject.result;
+                            Console.WriteLine($"JSON-RPC Result: {result}");
+                            topScoreButton.Text = result;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid JSON-RPC response");
+                        }
                     }
-                    else {
-                        var error = responseObject.error;
-                        Console.WriteLine($"JSON-RPC Error: {error.code} - {error.message}");
+                    else
+                    {
+                        Console.WriteLine("Empty JSON-RPC response");
                     }
                 }
             }
