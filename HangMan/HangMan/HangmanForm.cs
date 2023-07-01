@@ -16,11 +16,12 @@ namespace HangMan
     {
         private readonly int buttonWidth = 50;
         private readonly int buttonHeight = 45;
-        private List<Button> wordLengthBtns;
+        private readonly string randWordMethod = "getRandWord";
+
+        private List<Button> guessWordLengthBtns;
         private List<Button> clickedButtons;
         //private List<String> wordsList;
         private Dictionary<string, Image> statusImages;
-        private Random random;
         private string currentWord;
         private int wordCharactersGuessed;
         private int currentHangManStatus;
@@ -29,31 +30,42 @@ namespace HangMan
         public HangManForm()
         {
             InitializeComponent();
-            //InitializeAttributes();
-            //startGame();
+            InitializeAttributes();
+            startGameAsync();
             //Task<dynamic> task = MakeJsonRpcRequestWithParam("getRandWord");
-            Task<string> task = GetRandomWordAsync("getRandWord"); // delete this
+            //Task<string> task = GetRandomWordAsync("getRandWord"); // delete this
 
         }
 
         private void InitializeAttributes()
         {
-            this.wordLengthBtns = new List<Button>();
+            this.guessWordLengthBtns = new List<Button>();
             //this.wordsList = new List<String>();
             this.clickedButtons = new List<Button>();
             this.statusImages = new Dictionary<string, Image>();
-            this.random = new Random();
             this.currentWord = String.Empty;
             this.wordCharactersGuessed = 0;
             this.currentHangManStatus = 0;
             this.canPlay = true;
             //this.wordsList = readFile();
-            this.currentWord = GetRandomWordAsync("getRandWord").Result;
-            topScoreButton.Text = this.currentWord;
-            this.currentWord = this.currentWord.ToUpper();
-            this.wordLengthBtns = AddButtons(currentWord.Length);
-            this.statusImages = loadHangManstatus();
-            shownImageBox.Image = this.statusImages[this.currentHangManStatus.ToString()];
+        }
+
+        private async Task<bool> assignInitialValuesToAttributes() 
+        {
+            Task<string> task = GetRandomWordAsync(randWordMethod);
+            string taskString = await task;
+            bool isReady = false;
+            if (taskString != string.Empty) 
+            {
+                this.currentWord = task.Result;
+                topScoreButton.Text = this.currentWord;
+                this.currentWord = this.currentWord.ToUpper();
+                this.guessWordLengthBtns = AddButtons(currentWord.Length);
+                this.statusImages = loadHangManstatus();
+                shownImageBox.Image = this.statusImages[this.currentHangManStatus.ToString()];
+                isReady = true;
+            }
+            return isReady;
         }
 
         private Dictionary<string, Image> loadHangManstatus()
@@ -93,30 +105,35 @@ namespace HangMan
             return buttonList;
         }
 
-        public async Task<string> GetRandomWordAsync(string method)
+        public static async Task<string> GetRandomWordAsync(string method)
         {
-            Task<dynamic> requestTask = MakeJsonRpcRequestWithParam("getRandWord");
+            Task<dynamic> requestTask = MakeJsonRpcRequestWithParam(method);
             dynamic taskDynamic = await requestTask;
-            string result = "Default";
+            string result = string.Empty;
             if (taskDynamic != null)
             {
                 result = requestTask.Result;
-                topScoreButton.Text = result;
                 Console.WriteLine($"JSON-RPC Result from randWord: {result}");
             }
             return result;
         }
 
-        private void startGame() 
+        private async Task startGameAsync() 
         {
-            loadButtonsToGroupBox();
-            DisplayButtons();
+            Task<bool> task = assignInitialValuesToAttributes();
+            bool taskBool = await task;
+            if (taskBool) 
+            {
+                loadButtonsToGroupBox();
+                DisplayButtons();
+            }
+
 
         }
 
         private void loadButtonsToGroupBox()
         {
-            foreach (Button button in wordLengthBtns)
+            foreach (Button button in guessWordLengthBtns)
             {
                 wordGroupBox.Controls.Add(button);
             }
@@ -124,15 +141,15 @@ namespace HangMan
 
         private void DisplayButtons()
         {
-            int totalButtonWidth = wordLengthBtns.Count * buttonWidth;
+            int totalButtonWidth = guessWordLengthBtns.Count * buttonWidth;
             int buttonSpacing = 10;
 
-            int offsetX = (wordGroupBox.Width - totalButtonWidth - (buttonSpacing * (wordLengthBtns.Count - 1))) / 2;
+            int offsetX = (wordGroupBox.Width - totalButtonWidth - (buttonSpacing * (guessWordLengthBtns.Count - 1))) / 2;
 
             int x = offsetX;
             int y = 10;
 
-            foreach (Button button in wordLengthBtns)
+            foreach (Button button in guessWordLengthBtns)
             {
                 button.Location = new Point(x, y);
                 x += button.Width + buttonSpacing;
@@ -190,7 +207,7 @@ namespace HangMan
         {
             foreach (int position in positions) 
             {
-                this.wordLengthBtns[position].Text = character;
+                this.guessWordLengthBtns[position].Text = character;
             }
         }
 
@@ -236,12 +253,12 @@ namespace HangMan
             deleteButtonsToGroupBox();
             activateButtons();
             InitializeAttributes();
-            startGame();
+            startGameAsync();
         }
 
         private void deleteButtonsToGroupBox()
         {
-            foreach (Button button in wordLengthBtns)
+            foreach (Button button in guessWordLengthBtns)
             {
                 wordGroupBox.Controls.Remove(button);
             }
