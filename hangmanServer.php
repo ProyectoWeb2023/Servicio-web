@@ -12,7 +12,7 @@ session_start();
 // Verificar si es la primera llamada y establecer la palabra en la sesión
 if (!isset($_SESSION['word'])) {
     $_SESSION['word'] = getRandWord();
-    $_SESSION['failStatus'] = 0;
+    $_SESSION['failStatus'] = rand(5, 15);
     $_SESSION['winStatus'] = 0;
 }
 
@@ -38,7 +38,8 @@ function getRandWord()
 function getWordLength()
 {
     $word = $_SESSION['word'];
-    return strlen($word);
+    // return strlen($word);
+    return $word;
 }
 
 // Función para verificar el carácter en la palabra
@@ -61,7 +62,7 @@ function verifyCharacter($character)
         return $positions;
     } else {
         $failStatus[0] = 100;
-        $_SESSION['failStatus']++;
+        $_SESSION['failStatus'] += 1;
         $failStatus[1] = $_SESSION['failStatus'];
         return $failStatus;
     }
@@ -96,7 +97,7 @@ function isLoser()
 $server->getProcedureHandler()
     ->withCallback('greet', Closure::fromCallable('greet'))
     ->withCallback('addNumbers', Closure::fromCallable('addNumbers'))
-    ->withCallback('getRandWord', Closure::fromCallable('getRandWord'))
+    ->withCallback('getWordLength', Closure::fromCallable('getWordLength'))
     ->withCallback('isWinner', Closure::fromCallable('isWinner'))
     ->withCallback('isLoser', Closure::fromCallable('isLoser'))
     ->withCallback('verifyCharacter', Closure::fromCallable('verifyCharacter'));

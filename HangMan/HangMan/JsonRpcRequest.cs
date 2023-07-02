@@ -30,5 +30,6 @@ namespace HangMan
             this.Method = method;
             this.Id = Guid.NewGuid().ToString();
         }
+
     }
 }

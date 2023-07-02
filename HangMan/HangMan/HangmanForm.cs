@@ -97,15 +97,15 @@ namespace HangMan
 
         public static async Task<int> GetRandomWordAsync(string method)
         {
-            Task<dynamic> requestTask = MakeJsonRpcRequestWithParam(method);
+            Task<dynamic> requestTask = MakeJsonRpcRequest(method);
             dynamic taskDynamic = await requestTask;
-            int result = 0;
+            string result = string.Empty;
             if (taskDynamic != null)
             {
                 result = requestTask.Result;
                 Console.WriteLine($"JSON-RPC Result from randWord: {result}");
             }
-            return result;
+            return result.Length;
         }
 
         private async Task startGameAsync() 
@@ -190,7 +190,7 @@ namespace HangMan
 
         private async Task<List<int>> checkLetterAsync(string keyPressed) 
         {
-            Task<dynamic> requestTask = MakeJsonRpcRequestWithParam("verifyCharacter", new object[] { keyPressed });
+            Task<dynamic> requestTask = MakeJsonRpcRequest("verifyCharacter", new object[] { keyPressed });
             dynamic taskDynamic = await requestTask;
             List<int> positions = new List<int>();
             IList myList = null;
@@ -255,7 +255,7 @@ namespace HangMan
         private async Task<bool> checkGameCondition(string conditionMethod) 
         {
             bool gameEnded = false;
-            Task<dynamic> requestTask = MakeJsonRpcRequestWithParam(conditionMethod);
+            Task<dynamic> requestTask = MakeJsonRpcRequest(conditionMethod);
             dynamic requestResponse = await requestTask;
             if (requestResponse != null) 
             {
@@ -290,7 +290,7 @@ namespace HangMan
             }
         }
         
-        private static async Task<dynamic> MakeJsonRpcRequestWithParam(string method, object parameters = null)
+        private static async Task<dynamic> MakeJsonRpcRequest(string method, object parameters = null)
         {
             dynamic result = null;
             var url = "https://titanic.ecci.ucr.ac.cr/~eb95811/servicios_web/hangmanServer.php"; // Replace with your server URL
