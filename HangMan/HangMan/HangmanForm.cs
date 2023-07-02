@@ -11,16 +11,19 @@ using System.Text;
 using System.Security.Cryptography;
 using System.Runtime.CompilerServices;
 using System.Xml.Linq;
+using Newtonsoft.Json.Linq;
+using System.Collections;
 
 namespace HangMan
 {
     public partial class HangManForm : Form
     {
-        private readonly int buttonWidth = 50;
-        private readonly int buttonHeight = 45;
-        private readonly string randWordMethod = "getRandWord";
+        private readonly string randWordMethod = "getWordLength";
         private readonly string isWinnerMethod = "isWinner";
         private readonly string isLoserMethod = "isLoser";
+        private readonly int buttonWidth = 50;
+        private readonly int buttonHeight = 45;
+        private readonly int initialHangManStatus = 0;
 
 
         private List<Button> guessWordLengthBtns;
@@ -29,15 +32,13 @@ namespace HangMan
 
         private string currentWord;
         private int wordCharactersGuessed;
-        private int currentHangManStatus;
         private bool canPlay;
 
         public HangManForm()
         {
-            //InitializeComponent();
-            //InitializeAttributes();
-            //startGameAsync();
-            checkLetter("A");
+            InitializeComponent();
+            InitializeAttributes();
+            startGameAsync();
         }
 
         private void InitializeAttributes()
@@ -47,23 +48,19 @@ namespace HangMan
             this.statusImages = new Dictionary<string, Image>();
             this.currentWord = String.Empty;
             this.wordCharactersGuessed = 0;
-            this.currentHangManStatus = 0;
             this.canPlay = true;
         }
 
         private async Task<bool> assignInitialValuesToAttributes() 
         {
-            Task<string> task = GetRandomWordAsync(randWordMethod);
-            string taskString = await task;
+            Task<int> getWordTask = GetRandomWordAsync(randWordMethod);
+            int taskString = await getWordTask;
             bool isReady = false;
-            if (taskString != string.Empty) 
+            if (taskString != 0) 
             {
-                this.currentWord = task.Result;
-                topScoreButton.Text = this.currentWord;
-                //this.currentWord = this.currentWord.ToUpper();
-                this.guessWordLengthBtns = AddButtons(currentWord.Length);
+                this.guessWordLengthBtns = AddButtons(getWordTask.Result);
                 this.statusImages = loadHangManstatus();
-                shownImageBox.Image = this.statusImages[this.currentHangManStatus.ToString()];
+                shownImageBox.Image = this.statusImages[this.initialHangManStatus.ToString()];
                 isReady = true;
             }
             return isReady;
@@ -98,11 +95,11 @@ namespace HangMan
             return buttonList;
         }
 
-        public static async Task<string> GetRandomWordAsync(string method)
+        public static async Task<int> GetRandomWordAsync(string method)
         {
             Task<dynamic> requestTask = MakeJsonRpcRequestWithParam(method);
             dynamic taskDynamic = await requestTask;
-            string result = string.Empty;
+            int result = 0;
             if (taskDynamic != null)
             {
                 result = requestTask.Result;
@@ -167,37 +164,48 @@ namespace HangMan
             }
             else
             {
-                possibleCharIndexes = checkLetter(key.Text);
-                if (possibleCharIndexes.Count != 0)
+                Task <List<int>> checkLetterTask= checkLetterAsync(key.Text);
+                possibleCharIndexes = await checkLetterTask;
+                if (possibleCharIndexes != null) 
                 {
-                    changeWordLengthBtns(possibleCharIndexes, key.Text);
-                    this.wordCharactersGuessed += possibleCharIndexes.Count;
+                    if (possibleCharIndexes.Count != 0)
+                    {
+                        if (possibleCharIndexes[0] != 100) 
+                        {
+                            changeWordLengthBtns(possibleCharIndexes, key.Text);
+
+                        }
+                        else
+                        {
+                            changeHangManStatus(possibleCharIndexes[1]);
+                        }
+                        deactivateButton(key);
+                    }
                 }
-                else
-                {
-                    changeHangManStatus();
-                }
-                deactivateButton(key);
             }
             isPlayable = checkIfPlayableAsync(isWinnerMethod, isLoserMethod);
+            isPlayableDynamic = await isPlayable;
             // TODO: Separate method in "ifWinner" and "ifLoser" to know if the top score file should be modified.
         }
 
-        private List<int> checkLetter(string keyPressed) 
+        private async Task<List<int>> checkLetterAsync(string keyPressed) 
         {
-            List<int> indexes = new List<int>();
-            //char characterChosen = char.Parse(keyPressed);
-            //for (int index = 0; index < this.currentWord.Length; index++)
-            //{
-            //    if (this.currentWord[index] == characterChosen)
-            //    {
-            //        indexes.Add(index);
-            //    }
-            //}
-            var request =  MakeJsonRpcRequestWithParam("greet", new object[] { "John" });
-
-
-            return indexes;
+            Task<dynamic> requestTask = MakeJsonRpcRequestWithParam("verifyCharacter", new object[] { keyPressed });
+            dynamic taskDynamic = await requestTask;
+            List<int> positions = new List<int>();
+            IList myList = null;
+            if (taskDynamic != null)
+            {
+                myList = requestTask.Result as IList;
+                if (myList != null)
+                {
+                    foreach (object element in myList)
+                    {
+                        positions.Add(Int32.Parse(element.ToString()));
+                    }
+                }
+            }
+            return positions;
         }
 
         private void changeWordLengthBtns(List<int> positions, string character) 
@@ -214,11 +222,10 @@ namespace HangMan
             this.clickedButtons.Add(button);
         }
 
-        private void changeHangManStatus()
+        private void changeHangManStatus(int status)
         {
             if (this.canPlay) {
-                this.currentHangManStatus++;
-                shownImageBox.Image = this.statusImages[this.currentHangManStatus.ToString()];
+                shownImageBox.Image = this.statusImages[status.ToString()];
             }
 
         }
@@ -236,7 +243,11 @@ namespace HangMan
             if (!isWinnerDynamic && !isLoserDynamic)
             {
                 result = true;
-                Console.WriteLine($"JSON-RPC Result from randWord: {result}");
+            }
+            else 
+            {
+                tryAgainBtn.Enabled = true;
+                tryAgainBtn.Visible = true;
             }
             return result;
         }
