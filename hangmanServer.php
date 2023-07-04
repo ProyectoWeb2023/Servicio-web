@@ -10,12 +10,15 @@ use JsonRPC\Server;
 session_start();
 
 $server = new Server();
+
 // Verificar si es la primera llamada y establecer la palabra en la sesión
 if (!isset($_SESSION['word'])) {
     $word = getRandWord();
     $_SESSION['word'] = getRandWord();
     $_SESSION['failStatus'] = 0;
     $_SESSION['winStatus'] = 0;
+    $_SESSION['elapsedTime'] = 0;
+    $_SESSION['name'] = 0;
 }
 
 // Función para obtener una palabra aleatoria
@@ -39,12 +42,11 @@ function getRandWord()
 // Función para obtener el tamaño de la palabra
 function getWordLength()
 {
-    $status = array();
-    $status[] = $_SESSION['word'];
-    $status[]= $_SESSION['failStatus'];
-    $status[]=  $_SESSION['winStatus'];
+
+    $_SESSION['elapsedTime'] = microtime(true);
+    $word = $_SESSION['word'];
     // return strlen($word);
-    return $status;
+    return $word;
 }
 
 // Función para verificar el carácter en la palabra
@@ -74,14 +76,16 @@ function verifyCharacter($character)
 
 function isWinner()
 {
+    $winner = [] ;
     $winStatus = $_SESSION['winStatus'];
     $wordLength = strlen($_SESSION['word']);
     $isWinner = false;
 
     if ($winStatus === $wordLength) {
         $isWinner = true;
+        $_SESSION['elapsedTime'] = microtime(true) - $_SESSION['elapsedTime'];
     }
-
+    
     return $isWinner;
 }
 
@@ -98,32 +102,27 @@ function isLoser()
 
     return $isLoser;
 }
+function start($name){
+    $_SESSION['name'] = $name ;
+    return  $_SESSION['name'] ;
+}
+function getName(){
+   $name =$_SESSION['name'];
+   return $name;
+}
+function timeP(){
+   
+    return  $_SESSION['elapsedTime'];
+}
 
 $server->getProcedureHandler()
-    ->withCallback('greet', Closure::fromCallable('greet'))
-    ->withCallback('addNumbers', Closure::fromCallable('addNumbers'))
     ->withCallback('getWordLength', Closure::fromCallable('getWordLength'))
     ->withCallback('isWinner', Closure::fromCallable('isWinner'))
     ->withCallback('isLoser', Closure::fromCallable('isLoser'))
-    ->withCallback('verifyCharacter', Closure::fromCallable('verifyCharacter'));
-
-// Define the greet function
-function greet($params)
-{
-    $name = $params;
-    $greeting = 'Hello, ' . $name . '!';
-    return $greeting;
-}
-
-// Define the addNumbers function
-function addNumbers($params)
-{
-    $a = $params[0];
-    $b = $params[1];
-    $sum = $a + $b;
-    return $sum;
-}
-
+    ->withCallback('verifyCharacter', Closure::fromCallable('verifyCharacter'))
+    ->withCallback('start', Closure::fromCallable('start'))
+    ->withCallback('getName', Closure::fromCallable('getName'))
+    ->withCallback('timeP', Closure::fromCallable('timeP'));
 $request = file_get_contents('php://input');
 $response = $server->execute($request);
 header('Content-Type: application/json');
