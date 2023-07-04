@@ -22,10 +22,12 @@ def game_loop():
     #Arreglo de las posiciones de la letra que el usuari ha adivinado
     correctPositions =[]
     failStatus = 0
+    #se debe setear el nombre por primera vez para identificar a los jugadores y guardar el nombre de los mejores
+    make_request('start', ["Karen"])
+    # por ahora devuelve la palabra no el tamanoS
     print("Su palabra es ")
     word_length = make_request('getWordLength')
     print(word_length)
-    make_request('start', ["Karen"])
     while(True):
         # Siempre comprueba si es ganador o perdedor
         isWinner = make_request('isWinner')['result']
