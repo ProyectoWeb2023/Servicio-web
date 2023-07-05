@@ -4,16 +4,26 @@ require __DIR__ . '/vendor/autoload.php'; // Biblioteca cargada mediante compose
 
 use JsonRPC\Server;
 
-$server = new Server();
+
 
 // Iniciar sesión
 session_start();
 
+$server = new Server();
+
 // Verificar si es la primera llamada y establecer la palabra en la sesión
 if (!isset($_SESSION['word'])) {
+    setInitialStatus();
+}
+
+function setInitialStatus()
+{
+    $word = getRandWord();
     $_SESSION['word'] = getRandWord();
-    $_SESSION['failStatus'] = rand(5, 15);
+    $_SESSION['failStatus'] = 0;
     $_SESSION['winStatus'] = 0;
+    $_SESSION['elapsedTime'] = 0;
+    $_SESSION['name'] = 0;
 }
 
 // Función para obtener una palabra aleatoria
@@ -37,6 +47,8 @@ function getRandWord()
 // Función para obtener el tamaño de la palabra
 function getWordLength()
 {
+
+    $_SESSION['elapsedTime'] = microtime(true);
     $word = $_SESSION['word'];
     // return strlen($word);
     return $word;
@@ -53,10 +65,9 @@ function verifyCharacter($character)
     for ($i = 0; $i < strlen($word); $i++) {
         if ($word[$i] === $character) {
             $positions[] = $i;
-            $contador++;
+            $contador = $contador + 1;
         }
     }
-
     if (!empty($positions)) {
         $_SESSION['winStatus'] += $contador;
         return $positions;
@@ -70,16 +81,19 @@ function verifyCharacter($character)
 
 function isWinner()
 {
+    $winner = [];
     $winStatus = $_SESSION['winStatus'];
-    $wordLength = $_SESSION['word'];
+    $wordLength = strlen($_SESSION['word']);
     $isWinner = false;
 
-    if ($winStatus === $wordLength - 1) {
+    if ($winStatus === $wordLength) {
         $isWinner = true;
+        $_SESSION['elapsedTime'] = microtime(true) - $_SESSION['elapsedTime'];
     }
 
     return $isWinner;
 }
+
 
 function isLoser()
 {
@@ -93,48 +107,53 @@ function isLoser()
 
     return $isLoser;
 }
+function start($name)
+{
+    $_SESSION['name'] = $name;
+    return  $_SESSION['name'];
+}
+function getName()
+{
+    $name = $_SESSION['name'];
+    return $name;
+}
+function timeP()
+{
+    return  $_SESSION['elapsedTime'];
+}
+
+function restartGame()
+{
+    setInitialStatus();
+    return true;
+}
+
+function updateTopScores()
+{
+}
+
+function getTopScores()
+{
+    $file = 'times.txt';  // Replace with the actual path to your file
+
+    // Read the file and return its contents as an array of strings
+    $lines = file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    $firstTenLines = array_slice($lines, 0, 10);
+    return $firstTenLines;
+}
 
 $server->getProcedureHandler()
-    ->withCallback('greet', Closure::fromCallable('greet'))
-    ->withCallback('addNumbers', Closure::fromCallable('addNumbers'))
     ->withCallback('getWordLength', Closure::fromCallable('getWordLength'))
     ->withCallback('isWinner', Closure::fromCallable('isWinner'))
     ->withCallback('isLoser', Closure::fromCallable('isLoser'))
-    ->withCallback('verifyCharacter', Closure::fromCallable('verifyCharacter'));
-
-// Define the greet function
-function greet($params)
-{
-    $name = $params;
-    $greeting = 'Hello, ' . $name . '!';
-    return $greeting;
-}
-
-// Define the addNumbers function
-function addNumbers($params)
-{
-    $a = $params[0];
-    $b = $params[1];
-    $sum = $a + $b;
-    return $sum;
-}
+    ->withCallback('verifyCharacter', Closure::fromCallable('verifyCharacter'))
+    ->withCallback('start', Closure::fromCallable('start'))
+    ->withCallback('getName', Closure::fromCallable('getName'))
+    ->withCallback('timeP', Closure::fromCallable('timeP'))
+    ->withCallback('restartGame', Closure::fromCallable('restartGame'))
+    ->withCallback('getTopScores', Closure::fromCallable('getTopScores'));
 
 $request = file_get_contents('php://input');
 $response = $server->execute($request);
 header('Content-Type: application/json');
 echo $response;
-/*
-$server->getProcedureHandler()
-    ->withMethod('getWordLength')
-    ->withCallback('getWordLength');
-
-$server->getProcedureHandler()
-    ->withMethod('verifyCharacter')
-    ->withCallback('verifyCharacter')
-    ->withParam('character');
-
-$request = file_get_contents('php://input');
-$response = $server->execute($request);
-
-echo $response;
-*/

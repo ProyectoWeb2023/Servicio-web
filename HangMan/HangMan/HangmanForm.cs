@@ -27,8 +27,8 @@ namespace HangMan
         private readonly string isLoserMethod = "isLoser";
         private readonly string startServerMethod = "start";
         private readonly string restartServerMethod = "restartGame";
-        private readonly string verifyCharacter = "verifyCharacter";
-        private readonly string getTopScores = "getTopScores";
+        private readonly string verifyCharacterMethod = "verifyCharacter";
+        private readonly string getTopScoresMethod = "getTopScores";
 
         private readonly int buttonWidth = 50;
         private readonly int buttonHeight = 45;
@@ -183,7 +183,7 @@ namespace HangMan
             }
             else
             {
-                Task <List<int>> checkLetterTask= checkLetterAsync(this.verifyCharacter,key.Text);
+                Task <List<int>> checkLetterTask= checkLetterAsync(this.verifyCharacterMethod,key.Text);
                 possibleCharIndexes = await checkLetterTask;
                 if (possibleCharIndexes != null) 
                 {
@@ -390,30 +390,38 @@ namespace HangMan
         {
             topScoreBox.Visible = !topScoreBox.Visible;
             topScoreListView.Items.Clear();
-            string fileContent = Properties.Resources.times; // Replace "YourTextFileName" with the actual name of your text file resource
+            readTopScoresAsync();
+        }
 
-            // Create a StringReader to read the file content line by line
-            using (StringReader reader = new StringReader(fileContent))
+        private async Task readTopScoresAsync() 
+        {
+            Task<dynamic> requestTask = MakeJsonRpcRequest(getTopScoresMethod);
+            dynamic requestResponse = await requestTask;
+            List<string> topScores = new List<string>();
+            IList JSONList = null;
+            if (requestResponse != null)
             {
-                string line;
-                while ((line = reader.ReadLine()) != null)
+                JSONList = requestTask.Result as IList;
+                if (JSONList != null) 
                 {
-                    // Parse the line and split it into name and time
-                    string[] parts = line.Split(':');
-                    if (parts.Length == 2)
+                    foreach (object element in JSONList)
                     {
-                        string name = parts[0].Trim();
-                        string time = parts[1].Trim();
+                        // Parse the line and split it into name and time
+                        string[] parts = element.ToString().Split(':');
+                        if (parts.Length == 2)
+                        {
+                            string name = parts[0].Trim();
+                            string time = parts[1].Trim();
 
-                        // Create a new ListViewItem with name and time
-                        ListViewItem item = new ListViewItem(new[] { name, time });
+                            // Create a new ListViewItem with name and time
+                            ListViewItem listItems = new ListViewItem(new[] { name, time });
 
-                        // Add the ListViewItem to the ListView
-                        topScoreListView.Items.Add(item);
+                            // Add the ListViewItem to the ListView
+                            topScoreListView.Items.Add(listItems);
+                        }
                     }
                 }
             }
-
         }
     }
 }
