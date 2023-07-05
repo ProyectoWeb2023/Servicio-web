@@ -26,10 +26,13 @@ namespace HangMan
         private readonly string isWinnerMethod = "isWinner";
         private readonly string isLoserMethod = "isLoser";
         private readonly string startServerMethod = "start";
+        private readonly string restartServerMethod = "restartGame";
+        private readonly string verifyCharacter = "verifyCharacter";
+        private readonly string getTopScores = "getTopScores";
+
         private readonly int buttonWidth = 50;
         private readonly int buttonHeight = 45;
         private readonly int initialHangManStatus = 0;
-
 
         private List<Button> guessWordLengthBtns;
         private List<Button> clickedButtons;
@@ -180,7 +183,7 @@ namespace HangMan
             }
             else
             {
-                Task <List<int>> checkLetterTask= checkLetterAsync(key.Text);
+                Task <List<int>> checkLetterTask= checkLetterAsync(this.verifyCharacter,key.Text);
                 possibleCharIndexes = await checkLetterTask;
                 if (possibleCharIndexes != null) 
                 {
@@ -204,9 +207,9 @@ namespace HangMan
             // TODO: Separate method in "ifWinner" and "ifLoser" to know if the top score file should be modified.
         }
 
-        private async Task<List<int>> checkLetterAsync(string keyPressed) 
+        private async Task<List<int>> checkLetterAsync(string method, string keyPressed) 
         {
-            Task<dynamic> requestTask = MakeJsonRpcRequest("verifyCharacter", new object[] { keyPressed });
+            Task<dynamic> requestTask = MakeJsonRpcRequest(method, new object[] { keyPressed });
             dynamic taskDynamic = await requestTask;
             List<int> positions = new List<int>();
             IList myList = null;
@@ -295,7 +298,17 @@ namespace HangMan
             deleteButtonsToGroupBox();
             activateButtons();
             InitializeAttributes();
-            startGameAsync();
+            restartGame(restartServerMethod);
+        }
+
+        private async Task restartGame(string method) 
+        {
+            Task<dynamic> restartTask = MakeJsonRpcRequest(method);
+            dynamic restartGame = await restartTask;
+            if (restartGame != null)
+            {
+                startGameAsync();
+            }
         }
 
         private void deleteButtonsToGroupBox()
