@@ -42,7 +42,7 @@ namespace HangMan
         {
             InitializeComponent();
             InitializeAttributes();
-            startGameAsync();
+            deactivateKeyboardButtons();
         }
 
         private void InitializeAttributes()
@@ -357,6 +357,8 @@ namespace HangMan
                 Button keyPressed = (Button)sender;
                 keyPressed.Enabled = false;
                 playerNameBox.Enabled = false;
+                activateKeyboardButtons();
+                startGameAsync();
             }
         }
     }

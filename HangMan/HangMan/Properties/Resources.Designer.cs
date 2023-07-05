@@ -131,7 +131,17 @@ namespace HangMan.Properties {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Apple
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Hangman_game {
+            get {
+                object obj = ResourceManager.GetObject("Hangman_game", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Azkaban
         ///Car
         ///Dog
         ///Moon
@@ -204,7 +214,7 @@ namespace HangMan.Properties {
         ///Globe
         ///Robot
         ///Wings
-        ///Ch [resto de la cadena truncado]&quot;;.
+        /// [resto de la cadena truncado]&quot;;.
         /// </summary>
         internal static string words {
             get {
@@ -213,7 +223,7 @@ namespace HangMan.Properties {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Apple
+        ///   Busca una cadena traducida similar a Azkaban
         ///Car
         ///Dog
         ///Moon
@@ -286,7 +296,7 @@ namespace HangMan.Properties {
         ///Globe
         ///Robot
         ///Wings
-        ///Ch [resto de la cadena truncado]&quot;;.
+        /// [resto de la cadena truncado]&quot;;.
         /// </summary>
         internal static string words1 {
             get {
@@ -295,7 +305,7 @@ namespace HangMan.Properties {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Apple
+        ///   Busca una cadena traducida similar a Azkaban
         ///Car
         ///Dog
         ///Moon
@@ -368,7 +378,7 @@ namespace HangMan.Properties {
         ///Globe
         ///Robot
         ///Wings
-        ///Ch [resto de la cadena truncado]&quot;;.
+        /// [resto de la cadena truncado]&quot;;.
         /// </summary>
         internal static string words2 {
             get {
