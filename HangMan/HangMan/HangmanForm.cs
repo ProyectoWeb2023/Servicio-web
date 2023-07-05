@@ -50,13 +50,14 @@ namespace HangMan
             deactivateKeyboardButtons();
         }
 
-        private void InitializeAttributes()
+
+        private void InitializeAttributes(string formerPlayerName = null)
         {
             this.guessWordLengthBtns = new List<Button>();
             this.clickedButtons = new List<Button>();
             this.statusImages = new Dictionary<string, Image>();
             this.currentWord = String.Empty;
-            this.playersName = String.Empty;
+            this.playersName = formerPlayerName ?? String.Empty;
             this.wordCharactersGuessed = 0;
             this.canPlay = true;
         }
@@ -204,6 +205,11 @@ namespace HangMan
             }
             isPlayable = checkIfPlayableAsync(isWinnerMethod, isLoserMethod);
             isPlayableDynamic = await isPlayable;
+            if (!isPlayableDynamic)
+            {
+                this.canPlay = false;
+                updateTopScores();
+            }
             // TODO: Separate method in "ifWinner" and "ifLoser" to know if the top score file should be modified.
         }
 
@@ -251,9 +257,8 @@ namespace HangMan
 
         private async Task<bool> checkIfPlayableAsync(string isWinner, string isLoser)
         {
-
-            Task<bool> isWinnerTask = checkGameCondition(isWinner);
             Task<bool> isLoserTask = checkGameCondition(isLoser);
+            Task<bool> isWinnerTask = checkGameCondition(isWinner);
             bool isWinnerDynamic = await isWinnerTask;
             bool isLoserDynamic = await isLoserTask;
 
@@ -297,7 +302,7 @@ namespace HangMan
             tryAgainBtn.Visible = false;
             deleteButtonsToGroupBox();
             activateButtons();
-            InitializeAttributes();
+            InitializeAttributes(this.playersName);
             restartGame(restartServerMethod);
         }
 
@@ -353,7 +358,6 @@ namespace HangMan
                         // Handle successful response
                         result = responseObject.result;
                         Console.WriteLine($"JSON-RPC Result: {result}");
-                        //topScoreButton.Text = result;
                     }
                     else
                     {
@@ -389,6 +393,11 @@ namespace HangMan
         private void topScoreButton_Click(object sender, EventArgs e)
         {
             topScoreBox.Visible = !topScoreBox.Visible;
+            updateTopScores();
+        }
+
+        private void updateTopScores() 
+        {
             topScoreListView.Items.Clear();
             readTopScoresAsync();
         }
