@@ -18,6 +18,9 @@ namespace HangMan
 {
     public partial class HangManForm : Form
     {
+        private static HttpClient httpClient = new HttpClient();
+        private static string url = "https://titanic.ecci.ucr.ac.cr/~eb95811/servicios_web/hangmanServer.php";
+
         private readonly string randWordMethod = "getWordLength";
         private readonly string isWinnerMethod = "isWinner";
         private readonly string isLoserMethod = "isLoser";
@@ -31,6 +34,7 @@ namespace HangMan
         private Dictionary<string, Image> statusImages;
 
         private string currentWord;
+        private string playersName;
         private int wordCharactersGuessed;
         private bool canPlay;
 
@@ -47,6 +51,7 @@ namespace HangMan
             this.clickedButtons = new List<Button>();
             this.statusImages = new Dictionary<string, Image>();
             this.currentWord = String.Empty;
+            this.playersName = String.Empty;
             this.wordCharactersGuessed = 0;
             this.canPlay = true;
         }
@@ -293,57 +298,66 @@ namespace HangMan
         private static async Task<dynamic> MakeJsonRpcRequest(string method, object parameters = null)
         {
             dynamic result = null;
-            var url = "https://titanic.ecci.ucr.ac.cr/~eb95811/servicios_web/hangmanServer.php"; // Replace with your server URL
 
             // Prepare the JSON-RPC request
             var request = new JsonRpcRequest(method, parameters);
             try
             {
-                using (var client = new HttpClient())
+                
+                var jsonRequest = JsonConvert.SerializeObject(request);
+
+                // Send the JSON-RPC request to the server
+                var response = await httpClient.PostAsync(url, new StringContent(jsonRequest, Encoding.UTF8, "application/json"));
+
+                // Read the response content as JSON string
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+
+                // Deserialize the JSON response
+                dynamic responseObject = JsonConvert.DeserializeObject(jsonResponse);
+
+                // Handle the JSON-RPC response
+                if (responseObject != null)
                 {
-                    var jsonRequest = JsonConvert.SerializeObject(request);
-
-                    // Send the JSON-RPC request to the server
-                    var response = await client.PostAsync(url, new StringContent(jsonRequest, Encoding.UTF8, "application/json"));
-
-                    // Read the response content as JSON string
-                    var jsonResponse = await response.Content.ReadAsStringAsync();
-
-                    // Deserialize the JSON response
-                    dynamic responseObject = JsonConvert.DeserializeObject(jsonResponse);
-
-                    // Handle the JSON-RPC response
-                    if (responseObject != null)
+                    if (responseObject.error != null)
                     {
-                        if (responseObject.error != null)
-                        {
-                            // Handle error response
-                            var error = responseObject.error;
-                            Console.WriteLine($"JSON-RPC Error: {error.code} - {error.message}");
-                        }
-                        else if (responseObject.result != null)
-                        {
-                            // Handle successful response
-                            result = responseObject.result;
-                            Console.WriteLine($"JSON-RPC Result: {result}");
-                            //topScoreButton.Text = result;
-                        }
-                        else
-                        {
-                            Console.WriteLine("Invalid JSON-RPC response");
-                        }
+                        // Handle error response
+                        var error = responseObject.error;
+                        Console.WriteLine($"JSON-RPC Error: {error.code} - {error.message}");
+                    }
+                    else if (responseObject.result != null)
+                    {
+                        // Handle successful response
+                        result = responseObject.result;
+                        Console.WriteLine($"JSON-RPC Result: {result}");
+                        //topScoreButton.Text = result;
                     }
                     else
                     {
-                        Console.WriteLine("Empty JSON-RPC response");
+                        Console.WriteLine("Invalid JSON-RPC response");
                     }
                 }
+                else
+                {
+                    Console.WriteLine("Empty JSON-RPC response");
+                }
+                
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error: {ex.Message}");
             }
             return result;
+        }
+
+        private void acceptPlayersNameBtn_Click(object sender, EventArgs e)
+        {
+            if (playerNameBox.Text != "Enter player's name here" && playerNameBox.Text != string.Empty && playerNameBox.Text != "") 
+            {
+                this.playersName = playerNameBox.Text;
+                Button keyPressed = (Button)sender;
+                keyPressed.Enabled = false;
+                playerNameBox.Enabled = false;
+            }
         }
     }
 }

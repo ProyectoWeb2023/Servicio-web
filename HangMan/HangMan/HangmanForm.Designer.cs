@@ -1,4 +1,6 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace HangMan
 {
@@ -61,6 +63,9 @@ namespace HangMan
             this.wordGroupBox = new System.Windows.Forms.GroupBox();
             this.shownImageBox = new System.Windows.Forms.PictureBox();
             this.tryAgainBtn = new System.Windows.Forms.Button();
+            this.playerNameBox = new System.Windows.Forms.TextBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.acceptPlayersNameBtn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.shownImageBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -378,7 +383,7 @@ namespace HangMan
             // 
             // topScoreButton
             // 
-            this.topScoreButton.Location = new System.Drawing.Point(26, 23);
+            this.topScoreButton.Location = new System.Drawing.Point(1174, 14);
             this.topScoreButton.Margin = new System.Windows.Forms.Padding(5);
             this.topScoreButton.Name = "topScoreButton";
             this.topScoreButton.Size = new System.Drawing.Size(145, 44);
@@ -408,7 +413,7 @@ namespace HangMan
             // tryAgainBtn
             // 
             this.tryAgainBtn.Enabled = false;
-            this.tryAgainBtn.Location = new System.Drawing.Point(26, 96);
+            this.tryAgainBtn.Location = new System.Drawing.Point(26, 91);
             this.tryAgainBtn.Margin = new System.Windows.Forms.Padding(5);
             this.tryAgainBtn.Name = "tryAgainBtn";
             this.tryAgainBtn.Size = new System.Drawing.Size(145, 44);
@@ -418,11 +423,49 @@ namespace HangMan
             this.tryAgainBtn.Visible = false;
             this.tryAgainBtn.Click += new System.EventHandler(this.tryAgainBtn_Click);
             // 
+            // playerNameBox
+            // 
+            this.playerNameBox.ForeColor = System.Drawing.Color.Gray;
+            this.playerNameBox.Location = new System.Drawing.Point(37, 28);
+            this.playerNameBox.MaxLength = 10;
+            this.playerNameBox.Name = "playerNameBox";
+            this.playerNameBox.Size = new System.Drawing.Size(124, 20);
+            this.playerNameBox.TabIndex = 58;
+            this.playerNameBox.Text = "Enter player's name here";
+            this.playerNameBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.playerNameBox.ForeColor = Color.Gray;
+            this.playerNameBox.GotFocus += PlayerNameBox_GotFocus;
+            this.playerNameBox.LostFocus += PlayerNameBox_LostFocus;
+            // 
+            // button1
+            // 
+            this.button1.Enabled = false;
+            this.button1.Location = new System.Drawing.Point(26, 14);
+            this.button1.Margin = new System.Windows.Forms.Padding(5);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(145, 44);
+            this.button1.TabIndex = 59;
+            this.button1.UseVisualStyleBackColor = true;
+            // 
+            // acceptPlayersNameBtn
+            // 
+            this.acceptPlayersNameBtn.Location = new System.Drawing.Point(26, 56);
+            this.acceptPlayersNameBtn.Margin = new System.Windows.Forms.Padding(5);
+            this.acceptPlayersNameBtn.Name = "acceptPlayersNameBtn";
+            this.acceptPlayersNameBtn.Size = new System.Drawing.Size(145, 25);
+            this.acceptPlayersNameBtn.TabIndex = 60;
+            this.acceptPlayersNameBtn.Text = "Accept";
+            this.acceptPlayersNameBtn.UseVisualStyleBackColor = true;
+            this.acceptPlayersNameBtn.Click += new System.EventHandler(this.acceptPlayersNameBtn_Click);
+            // 
             // HangManForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1333, 692);
+            this.Controls.Add(this.acceptPlayersNameBtn);
+            this.Controls.Add(this.playerNameBox);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.tryAgainBtn);
             this.Controls.Add(this.wordGroupBox);
             this.Controls.Add(this.button20);
@@ -460,10 +503,29 @@ namespace HangMan
             this.Text = "Hangman Game";
             ((System.ComponentModel.ISupportInitialize)(this.shownImageBox)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
+
+        private void PlayerNameBox_GotFocus(object sender, EventArgs e)
+        {
+            if (playerNameBox.Text == "Enter player's name here")
+            {
+                playerNameBox.Text = string.Empty;
+                playerNameBox.ForeColor = Color.Black;
+            }
+        }
+
+        private void PlayerNameBox_LostFocus(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(playerNameBox.Text))
+            {
+                playerNameBox.Text = "Enter player's name here";
+                playerNameBox.ForeColor = Color.Gray;
+            }
+        }
 
         private System.Windows.Forms.Button button20;
         private System.Windows.Forms.Button button21;
@@ -495,6 +557,9 @@ namespace HangMan
         private System.Windows.Forms.Button topScoreButton;
         private GroupBox wordGroupBox;
         private Button tryAgainBtn;
+        private TextBox playerNameBox;
+        private Button button1;
+        private Button acceptPlayersNameBtn;
     }
 }
 
