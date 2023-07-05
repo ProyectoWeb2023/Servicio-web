@@ -65,7 +65,10 @@ namespace HangMan
             this.playerNameBox = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.acceptPlayersNameBtn = new System.Windows.Forms.Button();
+            this.topScoreBox = new System.Windows.Forms.GroupBox();
+            this.topScoreListView = new System.Windows.Forms.ListView();
             ((System.ComponentModel.ISupportInitialize)(this.shownImageBox)).BeginInit();
+            this.topScoreBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // MButton
@@ -382,13 +385,14 @@ namespace HangMan
             // 
             // topScoreButton
             // 
-            this.topScoreButton.Location = new System.Drawing.Point(1174, 14);
+            this.topScoreButton.Location = new System.Drawing.Point(1126, 15);
             this.topScoreButton.Margin = new System.Windows.Forms.Padding(5);
             this.topScoreButton.Name = "topScoreButton";
             this.topScoreButton.Size = new System.Drawing.Size(145, 44);
             this.topScoreButton.TabIndex = 28;
             this.topScoreButton.Text = "Top Scores";
             this.topScoreButton.UseVisualStyleBackColor = true;
+            this.topScoreButton.Click += new System.EventHandler(this.topScoreButton_Click);
             // 
             // wordGroupBox
             // 
@@ -431,11 +435,10 @@ namespace HangMan
             this.playerNameBox.Size = new System.Drawing.Size(124, 20);
             this.playerNameBox.TabIndex = 58;
             this.playerNameBox.Text = "Enter player\'s name here";
-            this.playerNameBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.playerNameBox.ForeColor = Color.Gray;
             this.playerNameBox.GotFocus += PlayerNameBox_GotFocus;
             this.playerNameBox.LostFocus += PlayerNameBox_LostFocus;
-
+            this.playerNameBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // button1
             // 
@@ -458,11 +461,37 @@ namespace HangMan
             this.acceptPlayersNameBtn.UseVisualStyleBackColor = true;
             this.acceptPlayersNameBtn.Click += new System.EventHandler(this.acceptPlayersNameBtn_Click);
             // 
+            // topScoreBox
+            // 
+            this.topScoreBox.Controls.Add(this.topScoreListView);
+            this.topScoreBox.Location = new System.Drawing.Point(1075, 91);
+            this.topScoreBox.Name = "topScoreBox";
+            this.topScoreBox.Size = new System.Drawing.Size(246, 360);
+            this.topScoreBox.TabIndex = 61;
+            this.topScoreBox.TabStop = false;
+            this.topScoreBox.Visible = false;
+            // 
+            // topScoreListView
+            // 
+            this.topScoreListView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.topScoreListView.HideSelection = false;
+            this.topScoreListView.Location = new System.Drawing.Point(3, 16);
+            this.topScoreListView.Name = "topScoreListView";
+            this.topScoreListView.Size = new System.Drawing.Size(240, 341);
+            this.topScoreListView.TabIndex = 1;
+            this.topScoreListView.View = View.Details;
+            this.topScoreListView.Columns.Add("Name", 95);
+            this.topScoreListView.Columns.Add("Time", 140);
+            this.topScoreListView.UseCompatibleStateImageBehavior = false;
+            this.topScoreListView.Enabled = false;
+            this.topScoreListView.View = System.Windows.Forms.View.Details;
+            // 
             // HangManForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1333, 692);
+            this.Controls.Add(this.topScoreBox);
             this.Controls.Add(this.acceptPlayersNameBtn);
             this.Controls.Add(this.playerNameBox);
             this.Controls.Add(this.button1);
@@ -502,6 +531,7 @@ namespace HangMan
             this.Name = "HangManForm";
             this.Text = "Hangman Game";
             ((System.ComponentModel.ISupportInitialize)(this.shownImageBox)).EndInit();
+            this.topScoreBox.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -621,6 +651,8 @@ namespace HangMan
         private TextBox playerNameBox;
         private Button button1;
         private Button acceptPlayersNameBtn;
+        private GroupBox topScoreBox;
+        private ListView topScoreListView;
     }
 }
 

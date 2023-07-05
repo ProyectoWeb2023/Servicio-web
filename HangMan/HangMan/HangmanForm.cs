@@ -13,6 +13,7 @@ using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 using Newtonsoft.Json.Linq;
 using System.Collections;
+using System.IO;
 
 namespace HangMan
 {
@@ -24,6 +25,7 @@ namespace HangMan
         private readonly string randWordMethod = "getWordLength";
         private readonly string isWinnerMethod = "isWinner";
         private readonly string isLoserMethod = "isLoser";
+        private readonly string startServerMethod = "start";
         private readonly int buttonWidth = 50;
         private readonly int buttonHeight = 45;
         private readonly int initialHangManStatus = 0;
@@ -58,16 +60,25 @@ namespace HangMan
 
         private async Task<bool> assignInitialValuesToAttributes() 
         {
-            Task<int> getWordTask = GetRandomWordAsync(randWordMethod);
-            int taskString = await getWordTask;
+            Task<dynamic> playerNameTask = MakeJsonRpcRequest(startServerMethod, new object[] { this.playersName });
+            dynamic playerNameDynamic = await playerNameTask;
             bool isReady = false;
-            if (taskString != 0) 
+
+            if (playerNameDynamic != null)
             {
-                this.guessWordLengthBtns = AddButtons(getWordTask.Result);
-                this.statusImages = loadHangManstatus();
-                shownImageBox.Image = this.statusImages[this.initialHangManStatus.ToString()];
-                isReady = true;
+                this.playersName = playerNameTask.Result;
+                Task<int> getWordTask = GetRandomWordAsync(randWordMethod);
+                int taskString = await getWordTask;
+                if (taskString != 0)
+                {
+                    this.guessWordLengthBtns = AddButtons(getWordTask.Result);
+                    this.statusImages = loadHangManstatus();
+                    shownImageBox.Image = this.statusImages[this.initialHangManStatus.ToString()];
+                    isReady = true;
+                }
             }
+
+
             return isReady;
         }
 
@@ -360,6 +371,36 @@ namespace HangMan
                 activateKeyboardButtons();
                 startGameAsync();
             }
+        }
+
+        private void topScoreButton_Click(object sender, EventArgs e)
+        {
+            topScoreBox.Visible = !topScoreBox.Visible;
+            topScoreListView.Items.Clear();
+            string fileContent = Properties.Resources.times; // Replace "YourTextFileName" with the actual name of your text file resource
+
+            // Create a StringReader to read the file content line by line
+            using (StringReader reader = new StringReader(fileContent))
+            {
+                string line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    // Parse the line and split it into name and time
+                    string[] parts = line.Split(':');
+                    if (parts.Length == 2)
+                    {
+                        string name = parts[0].Trim();
+                        string time = parts[1].Trim();
+
+                        // Create a new ListViewItem with name and time
+                        ListViewItem item = new ListViewItem(new[] { name, time });
+
+                        // Add the ListViewItem to the ListView
+                        topScoreListView.Items.Add(item);
+                    }
+                }
+            }
+
         }
     }
 }

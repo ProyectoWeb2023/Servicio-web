@@ -112,36 +112,6 @@
     <None Include="Resources\a.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Images\a.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Images\a.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Images\b.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Images\chest.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Images\dead.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Images\head.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Images\noMan.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Images\oneArm.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Images\oneLeg.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Images\twoLeg.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Images\words.txt" />
   </ItemGroup>
   <ItemGroup>
@@ -167,6 +137,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Images\Hangman game.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\times.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
