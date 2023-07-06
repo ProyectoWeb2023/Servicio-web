@@ -5,3 +5,5 @@
 *.vsidx
 *.wsuo
 *.exe
+/HangMan/.vs/HangMan/v17/.suo
+*.json
