@@ -68,7 +68,7 @@ function verifyCharacter($character)
             $contador = $contador+1;
         }
     }
-    $contador += count($positions);
+    
     if (!empty($positions)) {
         $_SESSION['winStatus'] += $contador;
         return $positions;

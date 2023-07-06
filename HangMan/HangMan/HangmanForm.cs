@@ -21,7 +21,8 @@ namespace HangMan
     public partial class HangManForm : Form
     {
         private static HttpClient httpClient = new HttpClient();
-        private static string url = "https://titanic.ecci.ucr.ac.cr/~eb95811/servicios_web/hangmanServer.php";
+        //https://titanic.ecci.ucr.ac.cr/~eb95811/servicios_web/hangmanServer.php
+        private static string url = "https://titanic.ecci.ucr.ac.cr/~eb78169/tercerproyecto/hangmanServer.php";
 
         private readonly string randWordMethod = "getWordLength";
         private readonly string isWinnerMethod = "isWinner";
