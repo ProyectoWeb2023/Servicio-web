@@ -3,5 +3,5 @@
 ################################################################################
 
 *.vsidx
-/HangMan/HangMan/bin/Debug/HangMan.exe
-*.json
+*.wsuo
+*.exe
