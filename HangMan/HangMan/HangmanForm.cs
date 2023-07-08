@@ -117,7 +117,7 @@ namespace HangMan
             return buttonList;
         }
 
-        public static async Task<int> GetRandomWordAsync(string method)
+        private static async Task<int> GetRandomWordAsync(string method)
         {
             Task<dynamic> requestTask = MakeJsonRpcRequest(method);
             dynamic taskDynamic = await requestTask;
@@ -212,7 +212,6 @@ namespace HangMan
                 this.canPlay = false;
                 updateTopScores();
             }
-            // TODO: Separate method in "ifWinner" and "ifLoser" to know if the top score file should be modified.
         }
 
         private async Task<List<int>> checkLetterAsync(string method, string keyPressed) 
@@ -329,35 +328,22 @@ namespace HangMan
         private static async Task<dynamic> MakeJsonRpcRequest(string method, object parameters = null)
         {
             dynamic result = null;
-
-            // Prepare the JSON-RPC request
             var request = new JsonRpcRequest(method, parameters);
             try
             {
-                
                 var jsonRequest = JsonConvert.SerializeObject(request);
-
-                // Send the JSON-RPC request to the server
                 var response = await httpClient.PostAsync(url, new StringContent(jsonRequest, Encoding.UTF8, "application/json"));
-
-                // Read the response content as JSON string
                 var jsonResponse = await response.Content.ReadAsStringAsync();
-
-                // Deserialize the JSON response
                 dynamic responseObject = JsonConvert.DeserializeObject(jsonResponse);
-
-                // Handle the JSON-RPC response
                 if (responseObject != null)
                 {
                     if (responseObject.error != null)
                     {
-                        // Handle error response
                         var error = responseObject.error;
                         Console.WriteLine($"JSON-RPC Error: {error.code} - {error.message}");
                     }
                     else if (responseObject.result != null)
                     {
-                        // Handle successful response
                         result = responseObject.result;
                         Console.WriteLine($"JSON-RPC Result: {result}");
                     }
@@ -417,17 +403,12 @@ namespace HangMan
                 {
                     foreach (object element in JSONList)
                     {
-                        // Parse the line and split it into name and time
                         string[] parts = element.ToString().Split(':');
                         if (parts.Length == 2)
                         {
                             string name = parts[0].Trim();
                             string time = parts[1].Trim();
-
-                            // Create a new ListViewItem with name and time
                             ListViewItem listItems = new ListViewItem(new[] { name, time });
-
-                            // Add the ListViewItem to the ListView
                             topScoreListView.Items.Add(listItems);
                         }
                     }
